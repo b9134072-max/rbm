@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voucher Klaim - Rice Bowl Monster</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="app-header simple">
+    <a href="home.html" class="back-btn" aria-label="Kembali">❮</a>
+    <h1 class="page-title">Voucher Klaim</h1>
+  </header>
+
+  <main class="content with-bottom-nav">
+    <section class="points-summary">
+      <div class="points-label">Poin menunggu klaim</div>
+      <div class="points-value" id="pendingPoints">0</div>
+    </section>
+
+    <nav class="tabs">
+      <button class="tab-btn active" data-target="voucher">Voucher</button>
+      <button class="tab-btn" data-target="merchandise">Merchandise</button>
+    </nav>
+
+    <div id="voucher" class="reward-content active">
+      <div class="reward-grid">
+        <div class="reward-card">
+          <img src="https://images.unsplash.com/photo-1591122372494-08f08f1f185c?q=80&w=800" alt="Voucher Diskon">
+          <div class="card-body">
+            <h3>Voucher Diskon 10%</h3>
+            <div class="points-cost">100 Poin</div>
+            <button class="btn-tukar btn-claim">Klaim di Resto</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="merchandise" class="reward-content">
+      <div class="reward-grid">
+        <div class="reward-card">
+          <img src="https://plus.unsplash.com/premium_photo-1677541210266-6b748a336154?q=80&w=800" alt="Gantungan Kunci">
+          <div class="card-body">
+            <h3>Gantungan Kunci RBM</h3>
+            <div class="points-cost">150 Poin</div>
+            <button class="btn-tukar btn-claim">Klaim di Resto</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section style="padding: 0 16px; margin-top: 12px;">
+      <a class="exchange-btn" href="https://www.google.com/maps/search/?api=1&query=Rice+Bowl+Monsters+Surabaya" target="_blank" rel="noopener" style="justify-content:center;">
+        ➕ Tambahkan Lokasi
+      </a>
+    </section>
+  </main>
+
+  <nav class="bottom-nav">
+    <a class="bottom-link" href="home.html">
+      <span class="icon">🏠</span>
+      <span>Home</span>
+    </a>
+    <a class="bottom-link" href="menu.html">
+      <span class="icon">🍽️</span>
+      <span>Menu</span>
+    </a>
+    <a class="bottom-link" href="akun.html">
+      <span class="icon">👤</span>
+      <span>Akun</span>
+    </a>
+    <a class="bottom-link" href="tukarpoint.html">
+      <span class="icon">🎁</span>
+      <span>Tukar</span>
+    </a>
+    <a class="bottom-link active" href="klaim.html">
+      <span class="icon">🎫</span>
+      <span>Vcr Klaim</span>
+    </a>
+  </nav>
+
+  <script>
+    // Tabs behavior
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const contents = document.querySelectorAll('.reward-content');
+    tabButtons.forEach(btn => btn.addEventListener('click', () => {
+      tabButtons.forEach(b => b.classList.remove('active'));
+      contents.forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.getAttribute('data-target')).classList.add('active');
+    }));
+
+    // Pending/Claimed handling
+    const pendingEl = document.getElementById('pendingPoints');
+    function refreshPending(){
+      const pending = parseInt(localStorage.getItem('rbm_pending_points') || '0', 10);
+      pendingEl.textContent = isNaN(pending) ? '0' : String(pending);
+    }
+    refreshPending();
+
+    document.querySelectorAll('.btn-claim').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const card = btn.closest('.reward-card');
+        const costText = card.querySelector('.points-cost').textContent;
+        const match = costText.match(/(\d+)/);
+        const cost = match ? parseInt(match[1], 10) : 0;
+        let pending = parseInt(localStorage.getItem('rbm_pending_points') || '0', 10);
+        if (isNaN(pending) || pending < cost) {
+          alert('Poin pending tidak cukup untuk klaim ini.');
+          return;
+        }
+        pending -= cost;
+        localStorage.setItem('rbm_pending_points', String(pending));
+        const claimed = parseInt(localStorage.getItem('rbm_claimed_points') || '0', 10) || 0;
+        localStorage.setItem('rbm_claimed_points', String(claimed + cost));
+        alert('Klaim berhasil. Tunjukkan ke kasir.');
+        refreshPending();
+      });
+    });
+  </script>
+</body>
+</html>
+

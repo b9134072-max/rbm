@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tukar Poin - Rice Bowl Monster</title>
+  
+  <link rel="stylesheet" href="styles.css">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <header class="app-header simple">
+    <a href="home.html" class="back-btn" aria-label="Kembali">❮</a>
+    <h1 class="page-title">Tukar Poin</h1>
+  </header>
+
+  <main class="content with-bottom-nav">
+    
+    <section class="points-summary">
+      <div class="points-label">Poin Anda Saat Ini</div>
+      <div class="points-value" id="userPoints">Loading...</div>
+    </section>
+
+    <nav class="tabs">
+      <button class="tab-btn active" data-target="merchandise">Merchandise</button>
+      <button class="tab-btn" data-target="voucher">Voucher</button>
+    </nav>
+
+    <div id="merchandise" class="reward-content active">
+      <div class="reward-grid">
+        <div class="reward-card">
+          <img src="https://plus.unsplash.com/premium_photo-1677541210266-6b748a336154?q=80&w=800" alt="Gantungan Kunci">
+          <div class="card-body">
+            <h3>Gantungan Kunci RBM</h3>
+            <div class="points-cost">150 Poin</div>
+            <button class="btn-tukar">Tukar</button>
+          </div>
+        </div>
+        <div class="reward-card">
+          <img src="https://images.unsplash.com/photo-1572584642822-6e2d837a3d9b?q=80&w=800" alt="Tote Bag">
+          <div class="card-body">
+            <h3>Tote Bag Monster</h3>
+            <div class="points-cost">400 Poin</div>
+            <button class="btn-tukar">Tukar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="voucher" class="reward-content">
+      <div class="reward-grid">
+        <div class="reward-card">
+          <img src="https://images.unsplash.com/photo-1591122372494-08f08f1f185c?q=80&w=800" alt="Voucher Diskon">
+          <div class="card-body">
+            <h3>Voucher Diskon 10%</h3>
+            <div class="points-cost">100 Poin</div>
+            <button class="btn-tukar">Tukar</button>
+          </div>
+        </div>
+        <div class="reward-card">
+          <img src="https://images.unsplash.com/photo-1542034543-338232a55986?q=80&w=800" alt="Voucher Gratis Minum">
+          <div class="card-body">
+            <h3>Gratis Es Teh</h3>
+            <div class="points-cost">50 Poin</div>
+            <button class="btn-tukar">Tukar</button>
+          </div>
+        </div>
+        <div class="reward-card">
+          <img src="https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=800" alt="Voucher Potongan Harga">
+          <div class="card-body">
+            <h3>Potongan Rp 5.000</h3>
+            <div class="points-cost">250 Poin</div>
+            <button class="btn-tukar">Tukar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <nav class="bottom-nav">
+    <a class="bottom-link" href="home.html">
+      <span class="icon">🏠</span>
+      <span>Home</span>
+    </a>
+    <a class="bottom-link" href="menu.html">
+      <span class="icon">🍽️</span>
+      <span>Menu</span>
+    </a>
+    <a class="bottom-link" href="akun.html">
+      <span class="icon">👤</span>
+      <span>Akun</span>
+    </a>
+    <a class="bottom-link active" href="tukarpoint.html">
+      <span class="icon">🎁</span>
+      <span>Tukar</span>
+    </a>
+    <a class="bottom-link" href="klaim.html">
+      <span class="icon">🎫</span>
+      <span>Vcr Klaim</span>
+    </a>
+    <a class="bottom-link" href="lokasi.html">
+      <span class="icon">📍</span>
+      <span>Lokasi</span>
+    </a>
+  </nav>
+
+  <script>
+    // --- KODE JAVASCRIPT FINAL ---
+
+    // Fungsi untuk memuat data user
+    function loadUserPoints() {
+      const userData = JSON.parse(localStorage.getItem('rbm_user') || '{}');
+      if (userData.points !== undefined) {
+        document.getElementById('userPoints').textContent = userData.points;
+      } else {
+        document.getElementById('userPoints').textContent = '0';
+      }
+    }
+
+    // Fungsi untuk tukar poin di Google Sheets
+    async function exchangePointsInSheets(phoneNumber, pointsToExchange, itemName, itemType) {
+      try {
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx5R5WxuGGcGk-i9vLqHNlKOQiGSZFBwHMjfh0w8lCe6hphoMhhu1gW5GIeTrMyxK2vsA/exec';
+        
+        const response = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify({ 
+            action: 'exchangePoints', 
+            phone: phoneNumber,
+            points: pointsToExchange,
+            itemName: itemName,
+            itemType: itemType
+          })
+        });
+        
+        const result = await response.json();
+        return result.status === 'success' ? result : null;
+      } catch (error) {
+        console.error('Error exchanging points:', error);
+        return null;
+      }
+    }
+
+    // Fungsi untuk mengambil data merchandise dari Google Sheets
+    async function loadMerchandiseData() {
+      try {
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx5R5WxuGGcGk-i9vLqHNlKOQiGSZFBwHMjfh0w8lCe6hphoMhhu1gW5GIeTrMyxK2vsA/exec';
+        
+        const response = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify({ action: 'getMerchandiseData' })
+        });
+        
+        const result = await response.json();
+        
+        if (result.status === 'success' && result.data.length > 0) {
+          // Update merchandise section
+          const merchandiseSection = document.getElementById('merchandise');
+          if (merchandiseSection) {
+            const merchandiseGrid = merchandiseSection.querySelector('.reward-grid');
+            if (merchandiseGrid) {
+              merchandiseGrid.innerHTML = result.data.map(item => `
+                <div class="reward-card">
+                  <img src="${item.foto}" alt="${item.nama}">
+                  <div class="card-body">
+                    <h3>${item.nama}</h3>
+                    <div class="points-cost">${item.point} Poin</div>
+                    <button class="btn-tukar">Tukar</button>
+                  </div>
+                </div>
+              `).join('');
+            }
+          }
+        }
+      } catch (error) {
+        console.log('Error loading merchandise data:', error);
+      }
+    }
+    
+    // Fungsi untuk mengambil data voucher dari Google Sheets
+    async function loadVoucherData() {
+      try {
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx5R5WxuGGcGk-i9vLqHNlKOQiGSZFBwHMjfh0w8lCe6hphoMhhu1gW5GIeTrMyxK2vsA/exec';
+        
+        const response = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify({ action: 'getVoucherData' })
+        });
+        
+        const result = await response.json();
+        
+        if (result.status === 'success' && result.data.length > 0) {
+          // Update voucher section
+          const voucherSection = document.getElementById('voucher');
+          if (voucherSection) {
+            const voucherGrid = voucherSection.querySelector('.reward-grid');
+            if (voucherGrid) {
+              voucherGrid.innerHTML = result.data.map(item => `
+                <div class="reward-card">
+                  <img src="${item.foto}" alt="${item.nama}">
+                  <div class="card-body">
+                    <h3>${item.nama}</h3>
+                    <div class="points-cost">${item.point} Poin</div>
+                    <button class="btn-tukar">Tukar</button>
+                  </div>
+                </div>
+              `).join('');
+            }
+          }
+        }
+      } catch (error) {
+        console.log('Error loading voucher data:', error);
+      }
+    }
+
+    // Bagian 1: Logika untuk mengaktifkan tab berdasarkan URL saat halaman pertama kali dimuat
+    document.addEventListener('DOMContentLoaded', () => {
+        // Load user points
+        loadUserPoints();
+        
+        // Load data dari Google Sheets
+        loadMerchandiseData();
+        loadVoucherData();
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        const activeTab = urlParams.get('tab'); // Mengambil nilai dari ?tab=...
+
+        if (activeTab) {
+            const targetButton = document.querySelector(`.tab-btn[data-target="${activeTab}"]`);
+            const targetContent = document.getElementById(activeTab);
+
+            if (targetButton && targetContent) {
+                // Nonaktifkan semua tab yang mungkin aktif secara default
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.reward-content').forEach(content => content.classList.remove('active'));
+
+                // Aktifkan tab yang sesuai dari URL
+                targetButton.classList.add('active');
+                targetContent.classList.add('active');
+            }
+        }
+    });
+
+    // Bagian 2: Logika untuk mengganti tab ketika tombol diklik
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const rewardContents = document.querySelectorAll('.reward-content');
+
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        // Hapus kelas 'active' dari semua tombol dan konten
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        rewardContents.forEach(content => content.classList.remove('active'));
+
+        // Tambahkan kelas 'active' ke tombol yang diklik
+        button.classList.add('active');
+        
+        // Tampilkan konten yang sesuai
+        const targetId = button.getAttribute('data-target');
+        document.getElementById(targetId).classList.add('active');
+      });
+    });
+
+    // Bagian 3: Logika untuk tombol "Tukar" -> kurangi poin dan update ke Google Sheets
+    const tukarButtons = document.querySelectorAll('.btn-tukar');
+    tukarButtons.forEach(button => {
+        button.addEventListener('click', async () => {
+            const card = button.closest('.reward-card');
+            const itemName = card.querySelector('h3').textContent;
+            const costText = card.querySelector('.points-cost').textContent; // contoh: "150 Poin"
+            const match = costText.match(/(\d+)/);
+            const cost = match ? parseInt(match[1], 10) : 0;
+            
+            // Ambil data user
+            const userData = JSON.parse(localStorage.getItem('rbm_user') || '{}');
+            const currentPoints = parseInt(userData.points || '0', 10);
+            
+            // Cek apakah poin cukup
+            if (currentPoints < cost) {
+                alert(`Poin tidak cukup! Anda memiliki ${currentPoints} poin, butuh ${cost} poin.`);
+                return;
+            }
+            
+            // Konfirmasi tukar
+            const confirmed = confirm(`Tukar ${itemName} dengan ${cost} poin?\nPoin Anda: ${currentPoints}\nSisa poin: ${currentPoints - cost}`);
+            if (!confirmed) return;
+            
+            // Tentukan jenis item (voucher atau merchandise)
+            const itemType = itemName.includes('Voucher') || itemName.includes('Gratis') || itemName.includes('Potongan') ? 'voucher' : 'merchandise';
+            
+            // Tukar poin di Google Sheets
+            const result = await exchangePointsInSheets(userData.phone, cost, itemName, itemType);
+            
+            if (result) {
+                // Update localStorage
+                userData.points = result.newPoints;
+                localStorage.setItem('rbm_user', JSON.stringify(userData));
+                
+                // Update tampilan
+                document.getElementById('userPoints').textContent = result.newPoints;
+                
+                alert(`Berhasil menukar ${itemName}!\nPoin tersisa: ${result.newPoints}\nItem ditambahkan ke kolom F di Google Sheets`);
+            } else {
+                alert('Gagal menukar poin. Silakan coba lagi.');
+            }
+        });
+    });
+  </script>
+</body>
+</html>

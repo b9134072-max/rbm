@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Akun - Rice Bowl Monster</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="app-header simple">
+    <a href="home.html" class="back-btn" aria-label="Kembali">❮</a>
+    <h1 class="page-title">Akun</h1>
+  </header>
+
+  <main class="content with-bottom-nav">
+    <section class="user-profile-section">
+      <div class="user-profile-card" style="text-align:left">
+        <div class="profile-content" style="gap:12px">
+          <div class="profile-left" style="flex-direction:row; align-items:center; gap:12px;">
+            <div class="logo-container" style="margin:0">
+              <img src="logo-rbm.png" alt="Rice Bowl Monster Logo" style="width:56px; height:56px;">
+            </div>
+            <div>
+              <p class="form-title" style="margin:0; font-size:18px; color: var(--primary);">Rice Bowl Monsters</p>
+              <div class="welcome-text" style="margin-top:4px">
+                <span class="hello-text" style="font-size:14px;">Hallo, </span>
+                <span class="user-name" id="userName" style="font-size:14px;">Demo User</span>
+              </div>
+              <div class="welcome-text" style="margin-top:2px">
+                <span class="hello-text" style="font-size:13px; color: var(--muted);">Selamat datang, Monsters Lovers</span>
+              </div>
+            </div>
+          </div>
+          <div class="profile-right">
+            <div class="info-list" style="margin-top:10px;">
+              <div class="info-row">
+                <span class="info-label">Total Poin</span>
+                <span class="info-value" id="userPoints">1,250</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Poin menunggu klaim</span>
+                <span class="info-value" id="pendingPoints">0</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Poin sudah diklaim</span>
+                <span class="info-value" id="claimedPoints">0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h3 class="section-title">Aksi Akun</h3>
+      <div class="action-list">
+        <a class="action-row" href="https://wa.me/6281234567890" target="_blank" rel="noopener" aria-label="WhatsApp">
+          <div class="action-icon">💬</div>
+          <div class="action-label">Chat WhatsApp</div>
+        </a>
+        <a class="action-row" href="#" id="btnDeleteAccount" aria-label="Hapus Akun">
+          <div class="action-icon">🗑️</div>
+          <div class="action-label">Hapus Akun</div>
+        </a>
+        <a class="action-row" href="#" id="btnLogout" aria-label="Logout">
+          <div class="action-icon">🚪</div>
+          <div class="action-label">Logout</div>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottom-nav">
+    <a class="bottom-link" href="home.html">
+      <span class="icon">🏠</span>
+      <span>Home</span>
+    </a>
+    <a class="bottom-link" href="menu.html">
+      <span class="icon">🍽️</span>
+      <span>Menu</span>
+    </a>
+    <a class="bottom-link active" href="akun.html">
+      <span class="icon">👤</span>
+      <span>Akun</span>
+    </a>
+    <a class="bottom-link" href="tukarpoint.html">
+      <span class="icon">🎁</span>
+      <span>Tukar</span>
+    </a>
+    <a class="bottom-link" href="klaim.html">
+      <span class="icon">🎫</span>
+      <span>Vcr Klaim</span>
+    </a>
+    <a class="bottom-link" href="lokasi.html">
+      <span class="icon">📍</span>
+      <span>Lokasi</span>
+    </a>
+  </nav>
+
+  <script>
+    // Mock user name if available
+    const nameEl = document.getElementById('userName');
+    const storedName = localStorage.getItem('rbm_user_name');
+    if (storedName) nameEl.textContent = storedName;
+
+    // Load pending and claimed points
+    function updatePoints(){
+      const pending = parseInt(localStorage.getItem('rbm_pending_points') || '0', 10);
+      const claimed = parseInt(localStorage.getItem('rbm_claimed_points') || '0', 10);
+      document.getElementById('pendingPoints').textContent = isNaN(pending) ? '0' : String(pending);
+      document.getElementById('claimedPoints').textContent = isNaN(claimed) ? '0' : String(claimed);
+    }
+    updatePoints();
+
+    // Delete account clears local data
+    document.getElementById('btnDeleteAccount').addEventListener('click', (e) => {
+      e.preventDefault();
+      if (confirm('Hapus akun dan semua data lokal?')) {
+        localStorage.removeItem('rbm_pending_points');
+        localStorage.removeItem('rbm_claimed_points');
+        localStorage.removeItem('rbm_user_name');
+        updatePoints();
+        alert('Akun lokal dihapus.');
+      }
+    });
+    // Logout simply back to login page
+    document.getElementById('btnLogout').addEventListener('click', (e) => {
+      e.preventDefault();
+      window.location.href = 'index.html';
+    });
+  </script>
+</body>
+</html>
+
