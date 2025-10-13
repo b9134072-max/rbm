@@ -12,7 +12,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
-    /* Variabel Warna Dasar */
     :root {
       --bg: #4C2A85;
       --card: #ffffff;
@@ -32,7 +31,54 @@
     
     img { max-width: 100%; display: block; }
     
-    /* === GAYA HEADER TRANSPARAN === */
+    /* [STYLE POPUP PROMO] */
+/* --- KODE UNTUK POPUP --- */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 2000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+}
+
+.popup-content {
+    background: transparent; /* Ini membuat wadahnya transparan */
+    box-shadow: none;        /* Ini menghilangkan bayangan kotak */
+    max-width: 250px; /uk gambar
+    width: 100%;
+    position: relative;
+}
+
+.popup-content img {
+    width: 100%;
+}
+
+.popup-close {
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    background: white;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 20px;
+    font-weight: bold;
+    color: #4C2A85;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+/* --- AKHIR KODE POPUP --- */
+    
     .app-header {
       display: flex;
       align-items: center;
@@ -45,9 +91,6 @@
       z-index: 1000;
       background-color: transparent;
       box-shadow: none;
-    }
-    
-    .brand-name, .location-link, .notification-btn {
       text-shadow: 0 2px 4px rgba(0,0,0,0.5);
     }
     
@@ -79,7 +122,7 @@
       font-size: 13px;
     }
     .location-icon {
-        font-size: 16px;
+      font-size: 16px;
     }
     .location-link {
       color: var(--primary-text);
@@ -100,7 +143,6 @@
       margin-left: auto;
     }
 
-    /* === KONTEN UTAMA === */
     .content {
       padding: 0;
     }
@@ -142,18 +184,21 @@
       border-radius: 0 0 16px 16px;
     }
     
-    .menu-icons { 
-      display: grid; 
-      grid-template-columns: repeat(5, 1fr); 
-      gap: 16px; 
-      text-align: center;
-      padding: 0 16px;
-      position: relative;
-      background: var(--bg);
-      margin-top: -10px;
-      border-radius: 16px 16px 0 0;
-      padding-top: 24px;
-    }
+.menu-icons { 
+    display: flex;             /* Use flexbox for a single row */
+    overflow-x: auto;          /* Allow horizontal scrolling */
+    gap: 20px;                 /* Adjust spacing between icons */
+    padding: 0 16px 16px 16px; /* Add padding for aesthetics and scrollbar space */
+    text-align: center;
+    position: relative;
+    background: var(--bg);
+    margin-top: -10px;
+    border-radius: 16px 16px 0 0;
+    padding-top: 24px;
+    
+    /* These lines hide the scrollbar but keep it functional */
+    scrollbar-width: none; /* For Firefox */
+}
     
     .menu-icons::before {
       content: '';
@@ -163,15 +208,25 @@
       right: 0;
       height: 20px;
       background: var(--bg);
-      border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+      border-radius:100% 100% 0 0 / 100% 100% 0 0;
       transform: scaleX(1.1);
     }
-    .menu-icon { display: flex; flex-direction: column; align-items: center; gap: 8px; text-decoration: none; }
-    .menu-emoji { width: 56px; height: 56px; border-radius: 16px; background-color: var(--card); display: grid; place-items: center; font-size: 28px; box-shadow: 0 4px 8px rgba(0,0,0,0.08); }
+    .menu-icon { 
+        display: flex; flex-direction: column; align-items: center; gap: 8px; text-decoration: none; cursor: pointer; 
+    }
+    .menu-emoji { 
+        width: 56px; height: 56px; border-radius: 16px; background-color: var(--card); display: grid; place-items: center; font-size: 28px; box-shadow: 0 4px 8px rgba(0,0,0,0.08); transition: transform 0.2s, box-shadow 0.2s;
+    }
     .menu-icon span { font-size: 12px; font-weight: 600; color: var(--primary-text); }
     
-    /* Semua Menu grid */
-    .all-menu-section { padding: 16px; }
+    /* [STYLE UNTUK FILTER AKTIF] */
+    .menu-icon .menu-emoji.active {
+        transform: scale(1.1);
+        box-shadow: 0 6px 16px rgba(76, 42, 133, 0.5);
+        background-color: #f0e9ff;
+    }
+
+    .all-menu-section { padding: 16px; padding-bottom: 80px; }
     .all-menu-title { margin: 0 0 12px 0; color: var(--primary-text); font-size: 16px; font-weight: 700; }
     .all-menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
     .menu-card { background: var(--card); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); overflow: hidden; }
@@ -180,218 +235,47 @@
     .menu-card h3 { font-size: 14px; margin: 0; color: var(--text); }
     .menu-card .price { font-size: 13px; font-weight: 700; color: var(--primary); }
     
-    /* Styling untuk kotak profil user */
-    .user-profile-section {
-      padding: 0 16px;
-      margin-bottom: 20px;
-    }
-    
-    .user-profile-card {
-      background: var(--card);
-      border-radius: 16px;
-      padding: 12px 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      margin-top: -10px;
-      position: relative;
-      z-index: 2;
-    }
-    
-    .profile-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-    }
-    
-    .profile-left {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      flex: 1;
-    }
-    
-    .profile-right {
-      display: flex;
-      align-items: center;
-      flex-shrink: 0;
-    }
-    
-    .welcome-text {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    
-    .hello-text {
-      font-size: 16px;
-      font-weight: 400;
-      color: var(--text);
-    }
-    
-    .user-name {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--primary);
-    }
-    
-    .points-display {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .points-label {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--muted);
-    }
-    
-    .points-value {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--primary);
-      background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
-      padding: 5px 12px;
-      border-radius: 20px;
-      border: 1px solid #d1d5db;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-    
-    .pending-points-row {
-      margin-top: 6px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+    /* Sisa CSS Anda tetap sama... (user-profile, voucher, dll.) */
+    .user-profile-section { padding: 0 16px; margin-bottom: 20px; }
+    .user-profile-card { background: var(--card); border-radius: 16px; padding: 12px 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-top: -10px; position: relative; z-index: 2; }
+    .profile-content { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+    .profile-left { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+    .profile-right { display: flex; align-items: center; flex-shrink: 0; }
+    .welcome-text { display: flex; align-items: center; gap: 4px; }
+    .hello-text { font-size: 16px; font-weight: 400; color: var(--text); }
+    .user-name { font-size: 16px; font-weight: 700; color: var(--primary); }
+    .points-display { display: flex; align-items: center; gap: 8px; }
+    .points-label { font-size: 14px; font-weight: 500; color: var(--muted); }
+    .points-value { font-size: 14px; font-weight: 700; color: var(--primary); background: linear-gradient(135deg, #f3f4f6, #e5e7eb); padding: 5px 12px; border-radius: 20px; border: 1px solid #d1d5db; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .pending-points-row { margin-top: 6px; display: flex; align-items: center; gap: 8px; }
     .pending-label { font-size: 13px; color: var(--muted); }
-    .pending-value {
-      font-size: 13px;
-      font-weight: 700;
-      color: #b45309;
-      background: linear-gradient(135deg, #fff7ed, #ffedd5);
-      padding: 4px 10px;
-      border-radius: 16px;
-      border: 1px solid #fed7aa;
-    }
-    
-    .exchange-btn {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: linear-gradient(135deg, var(--primary), #5a2d9a);
-      color: var(--primary-text);
-      border: none;
-      border-radius: 20px;
-      padding: 10px 16px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(76, 42, 133, 0.25);
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .exchange-btn::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-      transition: left 0.5s;
-    }
-    
-    .exchange-btn:hover {
-      background: linear-gradient(135deg, #3c216b, #4a1f6b);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(76, 42, 133, 0.4);
-    }
-    
-    .exchange-btn:hover::before {
-      left: 100%;
-    }
-    
-    .exchange-btn:active {
-      transform: translateY(-1px);
-    }
-    
-    .exchange-icon {
-      font-size: 18px;
-      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));
-    }
-    
-    .exchange-text {
-      font-size: 14px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-    }
-    
-    /* Styling untuk kotak voucher kecil memanjang */
-    .voucher-section {
-      padding: 0 16px;
-      margin-bottom: 20px;
-    }
-    
-    .voucher-card {
-      background: var(--card);
-      border-radius: 10px;
-      padding: 8px 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      width: 100%;
-    }
-    
-    .voucher-content {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    
-    .voucher-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      text-decoration: none;
-      flex: 1;
-      padding: 6px 8px;
-      border-radius: 6px;
-      transition: all 0.2s ease;
-    }
-    
-    .voucher-item:hover {
-      background: #f8f9fa;
-      transform: translateY(-1px);
-    }
-    
-    .voucher-icon {
-      font-size: 16px;
-      width: 24px;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
-      border-radius: 5px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-    
-    .voucher-title {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text);
-      line-height: 1.2;
-    }
-    
-    .voucher-divider {
-      width: 1px;
-      height: 24px;
-      background: #e5e7eb;
-      flex-shrink: 0;
-    }
+    .pending-value { font-size: 13px; font-weight: 700; color: #b45309; background: linear-gradient(135deg, #fff7ed, #ffedd5); padding: 4px 10px; border-radius: 16px; border: 1px solid #fed7aa; }
+    .exchange-btn { display: flex; align-items: center; gap: 6px; background: linear-gradient(135deg, var(--primary), #5a2d9a); color: var(--primary-text); border: none; border-radius: 20px; padding: 10px 16px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(76, 42, 133, 0.25); position: relative; overflow: hidden; }
+    .exchange-btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition: left 0.5s; }
+    .exchange-btn:hover { background: linear-gradient(135deg, #3c216b, #4a1f6b); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(76, 42, 133, 0.4); }
+    .exchange-btn:hover::before { left: 100%; }
+    .exchange-btn:active { transform: translateY(-1px); }
+    .exchange-icon { font-size: 18px; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1)); }
+    .exchange-text { font-size: 14px; font-weight: 600; letter-spacing: 0.5px; }
+    .voucher-section { padding: 0 16px; margin-bottom: 20px; }
+    .voucher-card { background: var(--card); border-radius: 10px; padding: 8px 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); width: 100%; }
+    .voucher-content { display: flex; align-items: center; gap: 12px; }
+    .voucher-item { display: flex; align-items: center; gap: 8px; text-decoration: none; flex: 1; padding: 6px 8px; border-radius: 6px; transition: all 0.2s ease; }
+    .voucher-item:hover { background: #f8f9fa; transform: translateY(-1px); }
+    .voucher-icon { font-size: 16px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #f3f4f6, #e5e7eb); border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .voucher-title { font-size: 13px; font-weight: 700; color: var(--text); line-height: 1.2; }
+    .voucher-divider { width: 1px; height: 24px; background: #e5e7eb; flex-shrink: 0; }
   </style>
 </head>
 <body>
+
+  <div class="popup-overlay" id="promoPopup">
+    <div class="popup-content">
+      <img src="promo.png" alt="Promo Spesial">
+      <button class="popup-close" id="promoCloseBtn" aria-label="Tutup">X</button>
+    </div>
+  </div>
+
   <header class="app-header">
     <div class="logo">
       <img src="logo-rbm.png" alt="Rice Bowl Monster Logo">
@@ -410,14 +294,12 @@
     </button>
   </header>
 
-  <main class="content with-bottom-nav">
+  <main class="content">
     <section class="promo-section">
       <div class="promo-slider" id="promoSlider">
         <div class="promo-item"><img src="latar-utama.jpg" alt="Latar Utama 1"></div>
         <div class="promo-item"><img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?q=80&w=1600&auto=format&fit=crop" alt="Latar Utama 2"></div>
         <div class="promo-item"><img src="https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=1600&auto=format&fit=crop" alt="Latar Utama 3"></div>
-        <div class="promo-item"><img src="https://images.unsplash.com/photo-1604908176997-4315c979f3f1?q=80&w=1600&auto=format&fit=crop" alt="Latar Utama 4"></div>
-        <div class="promo-item"><img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?q=80&w=1600&auto=format&fit=crop" alt="Latar Utama 5"></div>
       </div>
     </section>
 
@@ -433,10 +315,6 @@
               <span class="points-label">Poin Anda:</span>
               <span class="points-value" id="userPoints">0</span>
             </div>
-            <div class="pending-points-row">
-              <span class="pending-label">Poin menunggu klaim:</span>
-              <span class="pending-value" id="pendingPoints">0</span>
-            </div>
           </div>
           <div class="profile-right">
             <button class="exchange-btn" id="exchangeBtn">
@@ -448,28 +326,41 @@
       </div>
     </section>
 
-<section class="voucher-section">
-  <div class="voucher-card">
-    <div class="voucher-content">
-      <a href="tukarpoint.html?tab=merchandise" class="voucher-item" aria-label="Mercendes">
-        <div class="voucher-icon">🏆</div>
-        <span class="voucher-title">Merchandise</span>
-      </a>
-      <div class="voucher-divider"></div>
-      <a href="tukarpoint.html?tab=voucher" class="voucher-item" aria-label="Voucher">
-        <div class="voucher-icon">🎫</div>
-        <span class="voucher-title">Voucher</span>
-      </a>
-    </div>
-  </div>
-</section>
+    <section class="voucher-section">
+      <div class="voucher-card">
+        <div class="voucher-content">
+          <a href="tukarpoint.html?tab=merchandise" class="voucher-item" aria-label="Merchandise">
+            <div class="voucher-icon">🏆</div>
+            <span class="voucher-title">Merchandise</span>
+          </a>
+          <div class="voucher-divider"></div>
+          <a href="tukarpoint.html?tab=voucher" class="voucher-item" aria-label="Voucher">
+            <div class="voucher-icon">🎫</div>
+            <span class="voucher-title">Voucher</span>
+          </a>
+        </div>
+      </div>
+    </section>
 
     <section class="menu-icons">
-      <a class="menu-icon" href="menu.html?cat=rice-bowl" aria-label="Rice Bowl"><div class="menu-emoji">🍚</div><span>Rice Bowl</span></a>
-      <a class="menu-icon" href="menu.html?cat=mie" aria-label="Mie"><div class="menu-emoji">🍜</div><span>Mie</span></a>
-      <a class="menu-icon" href="menu.html?cat=minuman" aria-label="Minuman"><div class="menu-emoji">🥤</div><span>Minuman</span></a>
-      <a class="menu-icon" href="menu.html?cat=es-vampur" aria-label="Es Vampur"><div class="menu-emoji">🧊</div><span>Es Vampur</span></a>
-      <a class="menu-icon" href="menu.html?cat=gorengan" aria-label="Gorengan"><div class="menu-emoji">🍤</div><span>Gorengan</span></a>
+      <div class="menu-icon category-filter" data-category="all" aria-label="Semua Menu">
+          <div class="menu-emoji active">⭐</div><span>Semua</span>
+      </div>
+      <div class="menu-icon category-filter" data-category="rice-bowl" aria-label="Rice Bowl">
+          <div class="menu-emoji">🍚</div><span>Rice Bowl</span>
+      </div>
+      <div class="menu-icon category-filter" data-category="mie" aria-label="Mie">
+          <div class="menu-emoji">🍜</div><span>Mie</span>
+      </div>
+      <div class="menu-icon category-filter" data-category="minuman" aria-label="Minuman">
+          <div class="menu-emoji">🥤</div><span>Minuman</span>
+      </div>
+      <div class="menu-icon category-filter" data-category="es-vampur" aria-label="Es Vampur">
+          <div class="menu-emoji">🧊</div><span>Es Vampur</span>
+      </div>
+      <div class="menu-icon category-filter" data-category="gorengan" aria-label="Gorengan">
+          <div class="menu-emoji">🍤</div><span>Gorengan</span>
+      </div>
     </section>
     
     <section class="all-menu-section">
@@ -479,185 +370,186 @@
   </main>
 
   <nav class="bottom-nav">
-    <a class="bottom-link active" href="home.html">
-      <span class="icon">🏠</span>
-      <span>Home</span>
-    </a>
-    <a class="bottom-link" href="menu.html">
-      <span class="icon">🍽️</span>
-      <span>Menu</span>
-    </a>
-    <a class="bottom-link" href="akun.html">
-      <span class="icon">👤</span>
-      <span>Akun</span>
-    </a>
-    <a class="bottom-link" href="tukarpoint.html">
-      <span class="icon">🎁</span>
-      <span>Tukar</span>
-    </a>
-    <a class="bottom-link" href="klaim.html">
-      <span class="icon">🎫</span>
-      <span>Vcr Klaim</span>
-    </a>
-    <a class="bottom-link" href="lokasi.html">
-      <span class="icon">📍</span>
-      <span>Lokasi</span>
-    </a>
+    <a class="bottom-link active" href="home.html"> <span class="icon">🏠</span> <span>Home</span> </a>
+    <a class="bottom-link" href="menu.html"> <span class="icon">🍽️</span> <span>Menu</span> </a>
+    <a class="bottom-link" href="akun.html"> <span class="icon">👤</span> <span>Akun</span> </a>
+    <a class="bottom-link" href="tukarpoint.html"> <span class="icon">🎁</span> <span>Tukar</span> </a>
+    <a class="bottom-link" href="klaim.html"> <span class="icon">🎫</span> <span>Vcr Klaim</span> </a>
+    <a class="bottom-link" href="lokasi.html"> <span class="icon">📍</span> <span>Lokasi</span> </a>
   </nav>
 
   <script>
-    // URL untuk Google Apps Script (pastikan ini sama dengan URL untuk login/register)
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxASUXLytgh_5LyDNztOMI_bDX_IKMETgkCe_jmMiK_Bs9dfiKbJKNjeuiu4iMi3szi/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxlPGEih-uNcZ1AJmVDgLbAk1k9M0ctDX-j_hgRob5aMEoXFH-qjf7FcSis7xSKQ_G3/exec';
     
-    // Auto-slide untuk promo slider
+function handlePromoPopup() {
+  const popup = document.getElementById('promoPopup');
+  const closeBtn = document.getElementById('promoCloseBtn');
+  if (!popup || !closeBtn) return;
+
+  // Langsung tampilkan popup tanpa memeriksa ingatan
+  popup.style.display = 'flex'; 
+
+  // Event listener untuk menutup popup
+  closeBtn.addEventListener('click', () => {
+    popup.style.display = 'none';
+  });
+}
     function initPromoSlider() {
       const slider = document.getElementById('promoSlider');
       if (!slider) return;
-      
       let currentSlide = 0;
       const slides = slider.children;
       const totalSlides = slides.length;
-      
-      function nextSlide() {
+      setInterval(() => {
         currentSlide = (currentSlide + 1) % totalSlides;
-        slider.scrollTo({
-          left: currentSlide * slider.offsetWidth,
-          behavior: 'smooth'
-        });
-      }
-      
-      setInterval(nextSlide, 3000);
+        slider.scrollTo({ left: currentSlide * slider.offsetWidth, behavior: 'smooth' });
+      }, 3000);
     }
-    
-    // Fungsi untuk mengambil data user dari localStorage
-    function loadUserData() {
-      try {
-        const userData = JSON.parse(localStorage.getItem('rbm_user') || '{}');
-        
-        if (!userData.nama || !userData.phone) {
-          console.log('Tidak ada data user, redirect ke halaman login...');
-          window.location.href = 'index.html'; // atau halaman login Anda
-          return;
-        }
-        
-        document.getElementById('userName').textContent = userData.nama;
-        document.getElementById('userPoints').textContent = userData.points || '0';
-        
-        console.log('Data user dari cache berhasil dimuat:', userData);
-        
-      } catch (error) {
-        console.error('Error memuat data user, redirect ke halaman login:', error);
-        window.location.href = 'index.html'; // Redirect jika ada error
-      }
-    }
-    
-    // Fungsi untuk mengambil gambar promo dari Google Sheets
-    async function loadPromoImages() {
-      // Fungsi ini bisa Anda kembangkan jika perlu
-      console.log('Memuat gambar promo (opsional)...');
-    }
-    
-    // Fungsi untuk sinkronisasi data user dari Google Sheets
-    async function syncUserDataFromSheets(phoneNumber) {
-      try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 detik timeout
-        
-        const response = await fetch(SCRIPT_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'text/plain;charset=utf-8',
-          },
-          body: JSON.stringify({ 
-            action: 'getUserData', 
-            phone: phoneNumber 
-          }),
-          signal: controller.signal
-        });
-        
-        clearTimeout(timeoutId);
-        const result = await response.json();
-        
-        if (result.status === 'success' && result.user) {
-          localStorage.setItem('rbm_user', JSON.stringify(result.user));
-          
-          document.getElementById('userName').textContent = result.user.nama;
-          document.getElementById('userPoints').textContent = result.user.points;
-          console.log('Data berhasil disinkronisasi dari Google Sheets:', result.user);
-        } else {
-            console.log('Gagal sinkronisasi:', result.message);
-        }
-      } catch (error) {
-        console.log('Sinkronisasi dengan Google Sheets gagal, menggunakan data lokal:', error.message);
-      }
-    }
-    
-    // Fungsi untuk menangani tombol tukar poin
+
     function initExchangeButton() {
       const exchangeBtn = document.getElementById('exchangeBtn');
       if (exchangeBtn) {
-        exchangeBtn.addEventListener('click', () => {
-          window.location.href = 'tukarpoint.html';
-        });
+        exchangeBtn.addEventListener('click', () => { window.location.href = 'tukarpoint.html'; });
       }
     }
     
-    // Render semua menu di beranda
-    function renderAllMenu() {
-      const grid = document.getElementById('allMenuGrid');
-      if (!grid) return;
-      const items = [
-        { name: 'RBM Chicken Bowl', price: 'Rp 25.000', img: 'https://images.unsplash.com/photo-1569058242259-622e02dc39a2?q=80&w=800' },
-        { name: 'Beef Teriyaki Bowl', price: 'Rp 32.000', img: 'https://images.unsplash.com/photo-1604908176997-4315c979f3f1?q=80&w=800' },
-        { name: 'Mie Pedas RBM', price: 'Rp 18.000', img: 'https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800' },
-        { name: 'Lemon Tea', price: 'Rp 8.000', img: 'https://images.unsplash.com/photo-1566843972141-b151e7cb0d48?q=80&w=800' },
-      ];
-      grid.innerHTML = items.map(it => (
-        `<div class="menu-card">`+
-        `<img src="${it.img}" alt="${it.name}">`+
-        `<div class="body"><h3>${it.name}</h3><div class="price">${it.price}</div></div>`+
-        `</div>`
-      )).join('');
+    // [FUNGSI RENDER MENU DIMODIFIKASI]
+    function renderAllMenu(category = 'all') { // Tambah parameter category, defaultnya 'all'
+        const grid = document.getElementById('allMenuGrid');
+        if (!grid) return;
+
+        const allItems = [
+            // --- Kategori Rice Bowl ---
+            { name: 'Hot Monsters Beef (Free Ice Tea)', price: 'Rp 39.900', img: 'menu/hotmonstersbeef.jpg', category: 'rice-bowl' },
+            { name: 'Special Monsters Beef (Free Ice Tea)', price: 'Rp 39.900', img: 'menu/Specialmonstersbeef.jpg', category: 'rice-bowl' },
+            { name: 'Honey Sauce Beef (Free Ice Tea)', price: 'Rp 39.900', img: 'menu/Honeysaucepapperbeef.jpg', category: 'rice-bowl' },
+            { name: 'Smoked Pepper Beef (Free Ice Tea)', price: 'Rp 39.900', img: 'menu/Semokedpapperbeef.jpg', category: 'rice-bowl' },
+            { name: 'Hot Monsters Chicken (Free Ice Tea)', price: 'Rp 26.900', img: 'menu/Hotmonsterschicken.jpg', category: 'rice-bowl' },
+            { name: 'Chicken Teriyaki (Free Ice Tea)', price: 'Rp 26.900', img: 'menu/Chickenteriyaki.jpg', category: 'rice-bowl' },
+            { name: 'Sweet & Sour Chicken (Free Ice Tea)', price: 'Rp 26.900', img: 'menu/Sweet&sourchicken.jpg', category: 'rice-bowl' },
+            { name: 'Javanesse Honey Spicy (Free Ice Tea)', price: 'Rp 26.900', img: 'menu/Javanessehoneyspicychicken.jpg', category: 'rice-bowl' },
+            { name: 'Chicken Katsu (Free Ice Tea)', price: 'Rp 28.900', img: 'menu/Chickenkatsu.jpg', category: 'rice-bowl' },
+            
+            // --- Kategori Mie ---
+            { name: 'Mie Hot Monsters', price: 'Rp 20.900', img: 'menu/miehotmonsters.jpg', category: 'mie' },
+            { name: 'Mie Ayam Monsters', price: 'Rp 20.900', img: 'menu/mieayammonsters.jpg', category: 'mie' },
+            { name: 'Mie Ayam Jamur', price: 'Rp 20.900', img: 'menu/mieayamjamur.jpg', category: 'mie' },
+            { name: 'Mie Ayam Katsu', price: 'Rp 22.900', img: 'menu/mieayamkatsu.jpg', category: 'mie' },
+            { name: 'Mie Beef Monsters', price: 'Rp 28.900', img: 'menu/miebeefmonsters.jpg', category: 'mie' },
+            { name: 'Mie Polos', price: 'Rp 15.000', img: 'menu/miepolos.jpg', category: 'mie' },
+
+            // Tambahkan kategori lainnya di sini jika ada
+            // { name: 'Contoh Minuman', price: 'Rp 10.000', img: 'menu/minuman.jpg', category: 'minuman' },
+        ];
+
+        // Filter item berdasarkan kategori yang dipilih
+        const itemsToRender = category === 'all' 
+            ? allItems 
+            : allItems.filter(item => item.category === category);
+
+        // Render menu yang sudah difilter
+        if (itemsToRender.length > 0) {
+            grid.innerHTML = itemsToRender.map(it => (
+                `<a href="menu.html" class="menu-card" style="text-decoration: none;">`+
+                `<img src="${it.img}" alt="${it.name}" loading="lazy">`+
+                `<div class="body"><h3>${it.name}</h3><div class="price">${it.price}</div></div>`+
+                `</a>`
+            )).join('');
+        } else {
+            grid.innerHTML = `<p style="color: white; grid-column: 1 / -1; text-align: center;">Menu tidak ditemukan.</p>`;
+        }
     }
-    
-    // Muat poin pending dari localStorage
+
+    // [FUNGSI BARU UNTUK INISIALISASI FILTER]
+    function initCategoryFilters() {
+        const filterButtons = document.querySelectorAll('.category-filter');
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Hapus class 'active' dari semua tombol
+                filterButtons.forEach(btn => btn.querySelector('.menu-emoji').classList.remove('active'));
+                
+                // Tambahkan class 'active' ke tombol yang diklik
+                button.querySelector('.menu-emoji').classList.add('active');
+
+                // Ambil kategori dari atribut data-
+                const category = button.dataset.category;
+                
+                // Render ulang menu sesuai kategori
+                renderAllMenu(category);
+            });
+        });
+    }
+
     function loadPendingPoints() {
       const el = document.getElementById('pendingPoints');
       if (!el) return;
       const pending = parseInt(localStorage.getItem('rbm_pending_points') || '0', 10);
       el.textContent = isNaN(pending) ? '0' : String(pending);
     }
+
+    function displayUserData(user) {
+        if (user && user.nama) {
+            document.getElementById('userName').textContent = user.nama;
+            document.getElementById('userPoints').textContent = user.points || '0';
+        }
+    }
     
-    // Inisialisasi ketika halaman dimuat
-    function init() {
-      // 1. Tampilkan data dari cache dulu agar UI tidak kosong
-      loadUserData(); 
-      
-      // 2. Ambil nomor telepon dari cache untuk proses sinkronisasi
+    async function syncUserDataFromSheets(phoneNumber) {
+      try {
+        const controller = new AbortController();
+        setTimeout(() => controller.abort(), 8000);
+        
+        const response = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          cache: 'no-cache',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action: 'getUserData', phone: phoneNumber }),
+          signal: controller.signal
+        });
+        
+        const result = await response.json();
+        
+        if (result.status === 'success' && result.user) {
+          localStorage.setItem('rbm_user', JSON.stringify(result.user));
+          displayUserData(result.user);
+          console.log('Sinkronisasi sukses. Data terbaru ditampilkan.', result.user);
+          return true;
+        }
+        return false;
+      } catch (error) {
+        console.log('Sinkronisasi gagal, koneksi bermasalah.', error.message);
+        return false;
+      }
+    }
+    
+    // [FUNGSI UTAMA (INIT) DIMODIFIKASI]
+    async function init() {
+      handlePromoPopup();      // Panggil fungsi popup
+      initPromoSlider();
+      initExchangeButton();
+      initCategoryFilters();   // Panggil fungsi filter
+      renderAllMenu();         // Panggil renderAllMenu tanpa argumen untuk menampilkan semua
+      loadPendingPoints();
+
       const cachedUserData = JSON.parse(localStorage.getItem('rbm_user') || '{}');
       
-      // 3. Jika ada nomor telepon, panggil fungsi sinkronisasi dengan Google Sheets
-      if (cachedUserData && cachedUserData.phone) {
-        console.log(`Mencoba sinkronisasi untuk nomor: ${cachedUserData.phone}`);
-        syncUserDataFromSheets(cachedUserData.phone);
-      } else {
-        console.log('Tidak ada nomor telepon di cache, sinkronisasi dilewati.');
+      if (!cachedUserData || !cachedUserData.phone) {
+        window.location.href = 'index.html';
+        return;
       }
+      
+      document.getElementById('userName').textContent = cachedUserData.nama;
+      document.getElementById('userPoints').textContent = '...';
 
-      // Jalankan fungsi inisialisasi lainnya
-      initPromoSlider();
-      loadPromoImages();
-      initExchangeButton();
-      renderAllMenu();
-      loadPendingPoints();
+      const syncSuccess = await syncUserDataFromSheets(cachedUserData.phone);
+      
+      if (!syncSuccess) {
+        console.log('Gagal sinkronisasi, menampilkan data dari cache.');
+        displayUserData(cachedUserData);
+      }
     }
     
-    // Pastikan DOM sudah siap sebelum menjalankan skrip
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', init);
-    } else {
-      init();
-    }
+    document.addEventListener('DOMContentLoaded', init);
   </script>
 </body>
 </html>

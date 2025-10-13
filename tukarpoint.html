@@ -10,305 +10,234 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    .popup-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background-color: rgba(0, 0, 0, 0.6); display: flex;
+      justify-content: center; align-items: center; z-index: 1000;
+      opacity: 0; visibility: hidden; transition: opacity 0.2s ease, visibility 0.2s ease;
+    }
+    .popup-overlay.show { opacity: 1; visibility: visible; }
+    .popup-box {
+      background: white; padding: 24px; border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2); width: 85%;
+      max-width: 350px; text-align: center; transform: scale(0.9);
+      transition: transform 0.2s ease;
+    }
+    .popup-overlay.show .popup-box { transform: scale(1); }
+    .popup-box h3 { margin-top: 0; margin-bottom: 12px; font-size: 1.2rem; color: #333; }
+    .popup-box p { margin-bottom: 24px; color: #666; white-space: pre-wrap; }
+    .popup-buttons { display: flex; justify-content: center; gap: 10px; }
+    .popup-buttons button { padding: 10px 20px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; flex-grow: 1; }
+    .popup-buttons .btn-primary { background-color: #E32827; color: white; }
+    .popup-buttons .btn-secondary { background-color: #e0e0e0; color: #333; }
+  </style>
+
 </head>
 <body>
-
+<div class="app-container">
   <header class="app-header simple">
     <a href="home.html" class="back-btn" aria-label="Kembali">❮</a>
     <h1 class="page-title">Tukar Poin</h1>
   </header>
-
   <main class="content with-bottom-nav">
-    
     <section class="points-summary">
       <div class="points-label">Poin Anda Saat Ini</div>
-      <div class="points-value" id="userPoints">Loading...</div>
+      <div class="points-value" id="userPoints">...</div>
     </section>
-
     <nav class="tabs">
       <button class="tab-btn active" data-target="merchandise">Merchandise</button>
       <button class="tab-btn" data-target="voucher">Voucher</button>
     </nav>
-
     <div id="merchandise" class="reward-content active">
-      <div class="reward-grid">
-        <div class="reward-card">
-          <img src="https://plus.unsplash.com/premium_photo-1677541210266-6b748a336154?q=80&w=800" alt="Gantungan Kunci">
-          <div class="card-body">
-            <h3>Gantungan Kunci RBM</h3>
-            <div class="points-cost">150 Poin</div>
-            <button class="btn-tukar">Tukar</button>
-          </div>
-        </div>
-        <div class="reward-card">
-          <img src="https://images.unsplash.com/photo-1572584642822-6e2d837a3d9b?q=80&w=800" alt="Tote Bag">
-          <div class="card-body">
-            <h3>Tote Bag Monster</h3>
-            <div class="points-cost">400 Poin</div>
-            <button class="btn-tukar">Tukar</button>
-          </div>
-        </div>
-      </div>
+      <div class="reward-grid"></div>
     </div>
-    
     <div id="voucher" class="reward-content">
-      <div class="reward-grid">
-        <div class="reward-card">
-          <img src="https://images.unsplash.com/photo-1591122372494-08f08f1f185c?q=80&w=800" alt="Voucher Diskon">
-          <div class="card-body">
-            <h3>Voucher Diskon 10%</h3>
-            <div class="points-cost">100 Poin</div>
-            <button class="btn-tukar">Tukar</button>
-          </div>
-        </div>
-        <div class="reward-card">
-          <img src="https://images.unsplash.com/photo-1542034543-338232a55986?q=80&w=800" alt="Voucher Gratis Minum">
-          <div class="card-body">
-            <h3>Gratis Es Teh</h3>
-            <div class="points-cost">50 Poin</div>
-            <button class="btn-tukar">Tukar</button>
-          </div>
-        </div>
-        <div class="reward-card">
-          <img src="https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=800" alt="Voucher Potongan Harga">
-          <div class="card-body">
-            <h3>Potongan Rp 5.000</h3>
-            <div class="points-cost">250 Poin</div>
-            <button class="btn-tukar">Tukar</button>
-          </div>
-        </div>
-      </div>
+      <div class="reward-grid"></div>
     </div>
-
   </main>
-
   <nav class="bottom-nav">
-    <a class="bottom-link" href="home.html">
-      <span class="icon">🏠</span>
-      <span>Home</span>
-    </a>
-    <a class="bottom-link" href="menu.html">
-      <span class="icon">🍽️</span>
-      <span>Menu</span>
-    </a>
-    <a class="bottom-link" href="akun.html">
-      <span class="icon">👤</span>
-      <span>Akun</span>
-    </a>
-    <a class="bottom-link active" href="tukarpoint.html">
-      <span class="icon">🎁</span>
-      <span>Tukar</span>
-    </a>
-    <a class="bottom-link" href="klaim.html">
-      <span class="icon">🎫</span>
-      <span>Vcr Klaim</span>
-    </a>
-    <a class="bottom-link" href="lokasi.html">
-      <span class="icon">📍</span>
-      <span>Lokasi</span>
-    </a>
+    <a class="bottom-link" href="home.html"> <span class="icon">🏠</span> <span>Home</span> </a>
+    <a class="bottom-link" href="menu.html"> <span class="icon">🍽️</span> <span>Menu</span> </a>
+    <a class="bottom-link" href="akun.html"> <span class="icon">👤</span> <span>Akun</span> </a>
+    <a class="bottom-link" href="tukarpoint.html"> <span class="icon">🎁</span> <span>Tukar</span> </a>
+    <a class="bottom-link" href="klaim.html"> <span class="icon">🎫</span> <span>Vcr Klaim</span> </a>
+    <a class="bottom-link" href="lokasi.html"> <span class="icon">📍</span> <span>Lokasi</span> </a>
   </nav>
+</div>
 
-  <script>
-    // --- KODE JAVASCRIPT FINAL ---
+<div id="customPopup" class="popup-overlay">
+  <div class="popup-box">
+    <h3 id="popupTitle">Judul Popup</h3>
+    <p id="popupMessage">Isi pesan di sini.</p>
+    <div class="popup-buttons">
+      <button id="popupBtnBatal" class="btn-secondary">Batal</button>
+      <button id="popupBtnOke" class="btn-primary">Oke</button>
+    </div>
+  </div>
+</div>
 
-    // Fungsi untuk memuat data user
+<script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxlPGEih-uNcZ1AJmVDgLbAk1k9M0ctDX-j_hgRob5aMEoXFH-qjf7FcSis7xSKQ_G3/exec';
+
+    const merchandise = [
+      { nama: 'Gantungan Kunci RBM', point: 150, foto: 'rewards/gantungan-kunci.jpg', type: 'merchandise' },
+      { nama: 'Tote Bag Monster', point: 400, foto: 'rewards/totebag.jpg', type: 'merchandise' },
+    ];
+    const vouchers = [
+      { nama: 'Voucher Diskon 10%', point: 100, foto: 'rewards/diskon10.jpg', type: 'voucher' },
+      { nama: 'Gratis Es Teh', point: 50, foto: 'rewards/gratis-es-teh.jpg', type: 'voucher' },
+      { nama: 'Potongan Rp 5.000', point: 250, foto: 'rewards/potongan5k.jpg', type: 'voucher' },
+    ];
+    const allRewards = [...merchandise, ...vouchers];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadUserPoints();
+      renderRewards(merchandise, 'merchandise');
+      renderRewards(vouchers, 'voucher');
+      setupTabs();
+      activateTabFromUrl();
+      setupTukarListener();
+    });
+
+    function showCustomPopup({ title, message, type = 'alert' }) {
+        const popup = document.getElementById('customPopup');
+        const titleEl = document.getElementById('popupTitle');
+        const messageEl = document.getElementById('popupMessage');
+        const okeBtn = document.getElementById('popupBtnOke');
+        const batalBtn = document.getElementById('popupBtnBatal');
+        titleEl.textContent = title;
+        messageEl.textContent = message;
+        batalBtn.style.display = (type === 'confirm') ? 'inline-block' : 'none';
+        popup.classList.add('show');
+        return new Promise(resolve => {
+            okeBtn.onclick = () => { popup.classList.remove('show'); resolve(true); };
+            batalBtn.onclick = () => { popup.classList.remove('show'); resolve(false); };
+        });
+    }
+
+    function renderRewards(dataArray, containerId) {
+      const grid = document.querySelector(`#${containerId} .reward-grid`);
+      if (grid) {
+        grid.innerHTML = dataArray.map(item => `
+          <div class="reward-card">
+            <img src="${item.foto}" alt="${item.nama}">
+            <div class="card-body">
+              <h3>${item.nama}</h3>
+              <div class="points-cost">${item.point} Poin</div>
+              <button class="btn-tukar">Tukar</button>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+    
     function loadUserPoints() {
       const userData = JSON.parse(localStorage.getItem('rbm_user') || '{}');
-      if (userData.points !== undefined) {
-        document.getElementById('userPoints').textContent = userData.points;
-      } else {
-        document.getElementById('userPoints').textContent = '0';
-      }
-    }
-
-    // Fungsi untuk tukar poin di Google Sheets
-    async function exchangePointsInSheets(phoneNumber, pointsToExchange, itemName, itemType) {
-      try {
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx5R5WxuGGcGk-i9vLqHNlKOQiGSZFBwHMjfh0w8lCe6hphoMhhu1gW5GIeTrMyxK2vsA/exec';
-        
-        const response = await fetch(SCRIPT_URL, {
-          method: 'POST',
-          body: JSON.stringify({ 
-            action: 'exchangePoints', 
-            phone: phoneNumber,
-            points: pointsToExchange,
-            itemName: itemName,
-            itemType: itemType
-          })
-        });
-        
-        const result = await response.json();
-        return result.status === 'success' ? result : null;
-      } catch (error) {
-        console.error('Error exchanging points:', error);
-        return null;
-      }
-    }
-
-    // Fungsi untuk mengambil data merchandise dari Google Sheets
-    async function loadMerchandiseData() {
-      try {
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx5R5WxuGGcGk-i9vLqHNlKOQiGSZFBwHMjfh0w8lCe6hphoMhhu1gW5GIeTrMyxK2vsA/exec';
-        
-        const response = await fetch(SCRIPT_URL, {
-          method: 'POST',
-          body: JSON.stringify({ action: 'getMerchandiseData' })
-        });
-        
-        const result = await response.json();
-        
-        if (result.status === 'success' && result.data.length > 0) {
-          // Update merchandise section
-          const merchandiseSection = document.getElementById('merchandise');
-          if (merchandiseSection) {
-            const merchandiseGrid = merchandiseSection.querySelector('.reward-grid');
-            if (merchandiseGrid) {
-              merchandiseGrid.innerHTML = result.data.map(item => `
-                <div class="reward-card">
-                  <img src="${item.foto}" alt="${item.nama}">
-                  <div class="card-body">
-                    <h3>${item.nama}</h3>
-                    <div class="points-cost">${item.point} Poin</div>
-                    <button class="btn-tukar">Tukar</button>
-                  </div>
-                </div>
-              `).join('');
-            }
-          }
-        }
-      } catch (error) {
-        console.log('Error loading merchandise data:', error);
-      }
+      document.getElementById('userPoints').textContent = userData.points || '0';
     }
     
-    // Fungsi untuk mengambil data voucher dari Google Sheets
-    async function loadVoucherData() {
-      try {
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx5R5WxuGGcGk-i9vLqHNlKOQiGSZFBwHMjfh0w8lCe6hphoMhhu1gW5GIeTrMyxK2vsA/exec';
-        
-        const response = await fetch(SCRIPT_URL, {
-          method: 'POST',
-          body: JSON.stringify({ action: 'getVoucherData' })
-        });
-        
-        const result = await response.json();
-        
-        if (result.status === 'success' && result.data.length > 0) {
-          // Update voucher section
-          const voucherSection = document.getElementById('voucher');
-          if (voucherSection) {
-            const voucherGrid = voucherSection.querySelector('.reward-grid');
-            if (voucherGrid) {
-              voucherGrid.innerHTML = result.data.map(item => `
-                <div class="reward-card">
-                  <img src="${item.foto}" alt="${item.nama}">
-                  <div class="card-body">
-                    <h3>${item.nama}</h3>
-                    <div class="points-cost">${item.point} Poin</div>
-                    <button class="btn-tukar">Tukar</button>
-                  </div>
-                </div>
-              `).join('');
+    function setupTukarListener() {
+      const mainContent = document.querySelector('.content');
+      mainContent.addEventListener('click', async (event) => {
+        if (event.target.classList.contains('btn-tukar')) {
+          const button = event.target;
+          if (button.disabled) return;
+
+          const card = button.closest('.reward-card');
+          const itemName = card.querySelector('h3').textContent;
+          const costText = card.querySelector('.points-cost').textContent;
+          const cost = parseInt(costText, 10);
+          
+          let userData = JSON.parse(localStorage.getItem('rbm_user') || '{}');
+          if (!userData.phone) {
+            await showCustomPopup({ title: 'Gagal', message: 'Data user tidak ditemukan. Silakan login ulang.' });
+            return;
+          }
+          const currentPoints = parseInt(userData.points || '0', 10);
+          
+          if (currentPoints < cost) {
+            await showCustomPopup({ title: 'Poin Tidak Cukup', message: `Poin Anda ${currentPoints}, butuh ${cost} poin untuk menukar ini.` });
+            return;
+          }
+          
+          const confirmed = await showCustomPopup({
+            title: 'Konfirmasi Penukaran',
+            message: `Tukar ${itemName} dengan ${cost} poin?\nSisa poin Anda akan menjadi: ${currentPoints - cost}`,
+            type: 'confirm'
+          });
+
+          if (!confirmed) return;
+          
+          button.textContent = 'Memproses...';
+          button.disabled = true;
+
+          try {
+            const response = await fetch(SCRIPT_URL, {
+              method: 'POST',
+              body: JSON.stringify({ action: 'redeemReward', phone: userData.phone, reward: itemName, cost: cost })
+            });
+            const result = await response.json();
+            
+            if (result.status === 'success') {
+              // Update poin di local storage & tampilan
+              userData.points = result.newPoints;
+              localStorage.setItem('rbm_user', JSON.stringify(userData));
+              document.getElementById('userPoints').textContent = result.newPoints;
+              
+              // --- PERUBAHAN DIMULAI DI SINI ---
+              // 1. Cari detail lengkap item yang ditukar
+              const redeemedItem = allRewards.find(item => item.nama === itemName);
+              if (redeemedItem) {
+                // 2. Tambahkan ID unik dan status
+                const itemToClaim = { ...redeemedItem, id: Date.now(), status: 'unclaimed' };
+
+                // 3. Ambil data klaim yang sudah ada, atau buat array baru
+                const unclaimed = JSON.parse(localStorage.getItem('rbm_unclaimed_rewards') || '[]');
+                
+                // 4. Tambahkan item baru ke dalamnya
+                unclaimed.push(itemToClaim);
+                
+                // 5. Simpan kembali ke localStorage
+                localStorage.setItem('rbm_unclaimed_rewards', JSON.stringify(unclaimed));
+              }
+              // --- PERUBAHAN SELESAI ---
+              
+              await showCustomPopup({ title: 'Berhasil!', message: `Penukaran berhasil!\nSilakan cek halaman 'Vcr Klaim' untuk mengambil hadiah Anda di resto.` });
+            
+            } else {
+              await showCustomPopup({ title: 'Gagal', message: `Gagal menukar poin: ${result.message || 'Silakan coba lagi.'}` });
             }
+          } catch (error) {
+            console.error('Error:', error);
+            await showCustomPopup({ title: 'Error', message: 'Gagal menukar poin. Terjadi kesalahan koneksi.' });
+          } finally {
+            button.textContent = 'Tukar';
+            button.disabled = false;
           }
         }
-      } catch (error) {
-        console.log('Error loading voucher data:', error);
-      }
+      });
     }
 
-    // Bagian 1: Logika untuk mengaktifkan tab berdasarkan URL saat halaman pertama kali dimuat
-    document.addEventListener('DOMContentLoaded', () => {
-        // Load user points
-        loadUserPoints();
-        
-        // Load data dari Google Sheets
-        loadMerchandiseData();
-        loadVoucherData();
-        
-        const urlParams = new URLSearchParams(window.location.search);
-        const activeTab = urlParams.get('tab'); // Mengambil nilai dari ?tab=...
-
-        if (activeTab) {
-            const targetButton = document.querySelector(`.tab-btn[data-target="${activeTab}"]`);
-            const targetContent = document.getElementById(activeTab);
-
-            if (targetButton && targetContent) {
-                // Nonaktifkan semua tab yang mungkin aktif secara default
-                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-                document.querySelectorAll('.reward-content').forEach(content => content.classList.remove('active'));
-
-                // Aktifkan tab yang sesuai dari URL
-                targetButton.classList.add('active');
-                targetContent.classList.add('active');
-            }
-        }
-    });
-
-    // Bagian 2: Logika untuk mengganti tab ketika tombol diklik
-    const tabButtons = document.querySelectorAll('.tab-btn');
-    const rewardContents = document.querySelectorAll('.reward-content');
-
-    tabButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        // Hapus kelas 'active' dari semua tombol dan konten
-        tabButtons.forEach(btn => btn.classList.remove('active'));
-        rewardContents.forEach(content => content.classList.remove('active'));
-
-        // Tambahkan kelas 'active' ke tombol yang diklik
-        button.classList.add('active');
-        
-        // Tampilkan konten yang sesuai
-        const targetId = button.getAttribute('data-target');
-        document.getElementById(targetId).classList.add('active');
-      });
-    });
-
-    // Bagian 3: Logika untuk tombol "Tukar" -> kurangi poin dan update ke Google Sheets
-    const tukarButtons = document.querySelectorAll('.btn-tukar');
-    tukarButtons.forEach(button => {
-        button.addEventListener('click', async () => {
-            const card = button.closest('.reward-card');
-            const itemName = card.querySelector('h3').textContent;
-            const costText = card.querySelector('.points-cost').textContent; // contoh: "150 Poin"
-            const match = costText.match(/(\d+)/);
-            const cost = match ? parseInt(match[1], 10) : 0;
-            
-            // Ambil data user
-            const userData = JSON.parse(localStorage.getItem('rbm_user') || '{}');
-            const currentPoints = parseInt(userData.points || '0', 10);
-            
-            // Cek apakah poin cukup
-            if (currentPoints < cost) {
-                alert(`Poin tidak cukup! Anda memiliki ${currentPoints} poin, butuh ${cost} poin.`);
-                return;
-            }
-            
-            // Konfirmasi tukar
-            const confirmed = confirm(`Tukar ${itemName} dengan ${cost} poin?\nPoin Anda: ${currentPoints}\nSisa poin: ${currentPoints - cost}`);
-            if (!confirmed) return;
-            
-            // Tentukan jenis item (voucher atau merchandise)
-            const itemType = itemName.includes('Voucher') || itemName.includes('Gratis') || itemName.includes('Potongan') ? 'voucher' : 'merchandise';
-            
-            // Tukar poin di Google Sheets
-            const result = await exchangePointsInSheets(userData.phone, cost, itemName, itemType);
-            
-            if (result) {
-                // Update localStorage
-                userData.points = result.newPoints;
-                localStorage.setItem('rbm_user', JSON.stringify(userData));
-                
-                // Update tampilan
-                document.getElementById('userPoints').textContent = result.newPoints;
-                
-                alert(`Berhasil menukar ${itemName}!\nPoin tersisa: ${result.newPoints}\nItem ditambahkan ke kolom F di Google Sheets`);
-            } else {
-                alert('Gagal menukar poin. Silakan coba lagi.');
-            }
+    function setupTabs() {
+      const tabButtons = document.querySelectorAll('.tab-btn');
+      tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+          document.querySelectorAll('.reward-content').forEach(content => content.classList.remove('active'));
+          button.classList.add('active');
+          document.getElementById(button.getAttribute('data-target')).classList.add('active');
         });
-    });
-  </script>
+      });
+    }
+
+    function activateTabFromUrl() {
+      const activeTab = new URLSearchParams(window.location.search).get('tab');
+      if (activeTab) {
+        document.querySelector(`.tab-btn[data-target="${activeTab}"]`)?.click();
+      }
+    }
+</script>
 </body>
 </html>
