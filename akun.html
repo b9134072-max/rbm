@@ -34,22 +34,6 @@
               </div>
             </div>
           </div>
-          <div class="profile-right">
-            <div class="info-list" style="margin-top:10px;">
-              <div class="info-row">
-                <span class="info-label">Total Poin</span>
-                <span class="info-value" id="userPoints">1,250</span>
-              </div>
-              <div class="info-row">
-                <span class="info-label">Poin menunggu klaim</span>
-                <span class="info-value" id="pendingPoints">0</span>
-              </div>
-              <div class="info-row">
-                <span class="info-label">Poin sudah diklaim</span>
-                <span class="info-value" id="claimedPoints">0</span>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </section>
@@ -57,9 +41,17 @@
     <section class="section">
       <h3 class="section-title">Aksi Akun</h3>
       <div class="action-list">
-        <a class="action-row" href="https://wa.me/6281234567890" target="_blank" rel="noopener" aria-label="WhatsApp">
+        <a class="action-row" href="https://wa.me/6285173350016" target="_blank" rel="noopener" aria-label="WhatsApp">
           <div class="action-icon">💬</div>
           <div class="action-label">Chat WhatsApp</div>
+        </a>
+        <a class="action-row" href="faq.html" aria-label="Pertanyaan Umum">
+            <div class="action-icon">❓</div>
+            <div class="action-label">Pertanyaan Umum</div>
+        </a>
+        <a class="action-row" href="ketentuan.html" aria-label="Ketentuan Layanan">
+            <div class="action-icon">📜</div>
+            <div class="action-label">Ketentuan Layanan</div>
         </a>
         <a class="action-row" href="#" id="btnDeleteAccount" aria-label="Hapus Akun">
           <div class="action-icon">🗑️</div>
@@ -101,32 +93,30 @@
   </nav>
 
   <script>
-    // Mock user name if available
+    // Menampilkan nama pengguna dari localStorage
     const nameEl = document.getElementById('userName');
     const storedName = localStorage.getItem('rbm_user_name');
-    if (storedName) nameEl.textContent = storedName;
-
-    // Load pending and claimed points
-    function updatePoints(){
-      const pending = parseInt(localStorage.getItem('rbm_pending_points') || '0', 10);
-      const claimed = parseInt(localStorage.getItem('rbm_claimed_points') || '0', 10);
-      document.getElementById('pendingPoints').textContent = isNaN(pending) ? '0' : String(pending);
-      document.getElementById('claimedPoints').textContent = isNaN(claimed) ? '0' : String(claimed);
+    if (storedName) {
+        nameEl.textContent = storedName;
     }
-    updatePoints();
 
-    // Delete account clears local data
+    // Fungsi "Hapus Akun" akan membersihkan data lokal dan mengarahkan ke halaman login
     document.getElementById('btnDeleteAccount').addEventListener('click', (e) => {
       e.preventDefault();
-      if (confirm('Hapus akun dan semua data lokal?')) {
+      if (confirm('Apakah Anda yakin ingin menghapus akun dan semua data lokal? Tindakan ini tidak dapat diurungkan.')) {
+        // Hapus semua data yang terkait dengan pengguna
         localStorage.removeItem('rbm_pending_points');
         localStorage.removeItem('rbm_claimed_points');
         localStorage.removeItem('rbm_user_name');
-        updatePoints();
-        alert('Akun lokal dihapus.');
+        
+        alert('Akun lokal berhasil dihapus.');
+        
+        // Arahkan pengguna kembali ke halaman login
+        window.location.href = 'index.html';
       }
     });
-    // Logout simply back to login page
+
+    // Fungsi "Logout" hanya mengarahkan ke halaman login
     document.getElementById('btnLogout').addEventListener('click', (e) => {
       e.preventDefault();
       window.location.href = 'index.html';
@@ -134,4 +124,3 @@
   </script>
 </body>
 </html>
-
