@@ -8,6 +8,50 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* --- PENGATURAN SPASI FINAL --- */
+    /* 1. Reset semua spasi yang mungkin mengganggu dari styles.css */
+    .app-header.simple {
+      margin-bottom: 70px !important;
+    }
+    .location-header {
+      margin-top: 70px !important;
+    }
+
+    /* 2. Atur jarak yang kita inginkan HANYA dengan padding-top di sini */
+    .content.with-bottom-nav {
+      padding-top: 16px !important; /* <-- UBAH ANGKA INI UNTUK MENGATUR JARAK */
+    }
+    /* ------------------------------ */
+
+    body {
+      background-color: #f8f9fa;
+    }
+    .location-card {
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .loc-body {
+      padding: 16px;
+    }
+    .loc-title {
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+    .location-card iframe {
+      width: 100%;
+      height: 220px;
+      border: none;
+      display: block;
+    }
+    .form-title {
+      font-size: 20px;
+      margin-bottom: 4px;
+    }
+  </style>
 </head>
 <body>
   <header class="app-header simple">
@@ -17,54 +61,47 @@
 
   <main class="content with-bottom-nav">
     <div class="location-header">
-      <h2 class="form-title" style="margin-bottom:4px">Temukan Monsters di dekatmu</h2>
+      <h2 class="form-title">Temukan Monsters di dekatmu</h2>
       <p class="text-accent" style="margin:0">Pilih lokasi favorit untuk klaim atau pesan</p>
     </div>
 
     <div class="location-grid">
+
       <div class="location-card">
         <div class="loc-body">
-          <h3 class="loc-title">RBM - Kemenangan</h3>
-          <a class="loc-link" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Jl.+Kemenangan+No.+1,+Surabaya">Lihat di Google Maps</a>
+          <h3 class="loc-title">Rice Bowl Monsters - Ponti, Sidoarjo</h3>
+          <a class="loc-link" target="_blank" rel="noopener" href="https://maps.app.goo.gl/3q2oN17fC1vUaR3Z6">Lihat di Google Maps</a>
         </div>
-        <img src="latar-utama.jpg" alt="RBM Kemenangan">
+        <iframe 
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3956.165063491737!2d112.70156920557315!3d-7.446982931155137!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd7e1f39e373077%3A0x5806b47c62d4d036!2sRice%20Bowl%20Monsters%20-%20Ponti!5e0!3m2!1sen!2sid!4v1760433310415!5m2!1sen!2sid"
+          width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" 
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
       </div>
+
       <div class="location-card">
         <div class="loc-body">
-          <h3 class="loc-title">RBM - Setiabudi</h3>
-          <a class="loc-link" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Setiabudi,+Surabaya">Lihat di Google Maps</a>
+          <h3 class="loc-title">Rice Bowl Monsters - Darmokali, Surabaya</h3>
+          <a class="loc-link" target="_blank" rel="noopener" href="https://maps.app.goo.gl/29hQ4H5Z9p9o6oF8A">Lihat di Google Maps</a>
         </div>
-        <img src="https://images.unsplash.com/photo-1528605248644-14dd04022da1?q=80&w=1200" alt="RBM Setiabudi">
+        <iframe 
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3957.569791283041!2d112.7428305!3d-7.289688699999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd7fb00104bf403%3A0x7015e7bff6734f76!2sRice%20bowl%20Monsters%20-%20Darmokali!5e0!3m2!1sen!2sid!4v1760433154468!5m2!1sen!2sid" 
+          width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" 
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
       </div>
+
     </div>
   </main>
 
+
   <nav class="bottom-nav">
-    <a class="bottom-link" href="home.html">
-      <span class="icon">🏠</span>
-      <span>Home</span>
-    </a>
-    <a class="bottom-link" href="menu.html">
-      <span class="icon">🍽️</span>
-      <span>Menu</span>
-    </a>
-    <a class="bottom-link" href="akun.html">
-      <span class="icon">👤</span>
-      <span>Akun</span>
-    </a>
-    <a class="bottom-link" href="tukarpoint.html">
-      <span class="icon">🎁</span>
-      <span>Tukar</span>
-    </a>
-    <a class="bottom-link" href="klaim.html">
-      <span class="icon">🎫</span>
-      <span>Vcr Klaim</span>
-    </a>
-    <a class="bottom-link active" href="lokasi.html">
-      <span class="icon">📍</span>
-      <span>Lokasi</span>
-    </a>
+    <a class="bottom-link" href="home.html"><span class="icon">🏠</span><span>Home</span></a>
+    <a class="bottom-link" href="menu.html"><span class="icon">🍽️</span><span>Menu</span></a>
+    <a class="bottom-link" href="akun.html"><span class="icon">👤</span><span>Akun</span></a>
+    <a class="bottom-link" href="tukarpoint.html"><span class="icon">🎁</span><span>Tukar</span></a>
+    <a class="bottom-link" href="klaim.html"><span class="icon">🎫</span><span>Vcr Klaim</span></a>
+    <a class="bottom-link active" href="lokasi.html"><span class="icon">📍</span><span>Lokasi</span></a>
   </nav>
 </body>
 </html>
-
