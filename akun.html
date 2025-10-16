@@ -4,12 +4,142 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Akun - Rice Bowl Monster</title>
-  <link rel="stylesheet" href="styles.css">
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* === PENGATURAN DASAR & FONT === */
+    body {
+      margin: 0;
+      padding-bottom: 80px;
+      font-family: 'Inter', sans-serif;
+      background-color: #f0f2f5;
+      color: #333;
+    }
+
+    /* === HEADER === */
+    .app-header {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      background-color: transparent;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .back-btn {
+      font-size: 24px;
+      font-weight: bold;
+      text-decoration: none;
+      color: #333;
+    }
+
+    .page-title {
+      flex-grow: 1;
+      text-align: center;
+      margin: 0;
+      padding-right: 24px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    /* === KONTEN UTAMA === */
+    .content {
+      padding: 16px;
+    }
+
+    .section-title {
+      margin: 0 0 12px 0;
+      font-size: 16px;
+      color: #555;
+    }
+
+    /* === KARTU PROFIL PENGGUNA (DIUBAH) === */
+    .user-profile-card {
+      /* Background, shadow, dan padding telah dihapus agar tidak terlihat seperti kartu */
+      text-align: center;
+      margin-bottom: 24px; /* Menambahkan sedikit jarak ke bawah */
+    }
+
+    .profile-left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* === DAFTAR AKSI (RATA TENGAH) === */
+    .action-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .action-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      background-color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      color: #333;
+      font-weight: 600;
+      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .action-icon {
+      font-size: 20px;
+    }
+
+    /* === NAVIGASI BAWAH (BOTTOM NAV) === */
+    .bottom-nav {
+      display: flex;
+      justify-content: space-around;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: white;
+      border-top: 1px solid #e0e0e0;
+      padding: 8px 0;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .bottom-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: #888;
+      font-size: 11px;
+      gap: 4px;
+    }
+
+    .bottom-link .icon {
+      font-size: 22px;
+    }
+
+    .bottom-link.active {
+      color: var(--primary, #d32f2f);
+      font-weight: 600;
+    }
+  </style>
 </head>
 <body>
+  <script>
+    (function(){
+      try{
+        var nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+        var isReload = nav ? nav.type === 'reload' : (performance && performance.navigation && performance.navigation.type === 1);
+        if(isReload){ window.location.replace('home.html'); }
+      }catch(e){}
+    })();
+  </script>
   <header class="app-header simple">
     <a href="home.html" class="back-btn" aria-label="Kembali">❮</a>
     <h1 class="page-title">Akun</h1>
@@ -17,20 +147,17 @@
 
   <main class="content with-bottom-nav">
     <section class="user-profile-section">
-      <div class="user-profile-card" style="text-align:left">
-        <div class="profile-content" style="gap:12px">
-          <div class="profile-left" style="flex-direction:row; align-items:center; gap:12px;">
-            <div class="logo-container" style="margin:0">
+      <div class="user-profile-card">
+        <div class="profile-content">
+          <div class="profile-left">
+            <div class="logo-container">
               <img src="logo-rbm.png" alt="Rice Bowl Monster Logo" style="width:56px; height:56px;">
             </div>
             <div>
-              <p class="form-title" style="margin:0; font-size:18px; color: var(--primary);">Rice Bowl Monsters</p>
+              <p class="form-title" style="margin:0; font-size:23px; color: var(--primary, #d32f2f);">Rice Bowl Monsters</p>
               <div class="welcome-text" style="margin-top:4px">
                 <span class="hello-text" style="font-size:14px;">Hallo, </span>
-                <span class="user-name" id="userName" style="font-size:14px;">Demo User</span>
-              </div>
-              <div class="welcome-text" style="margin-top:2px">
-                <span class="hello-text" style="font-size:13px; color: var(--muted);">Selamat datang, Monsters Lovers</span>
+                <span class="user-name" id="userName" style="font-size:14px;">Monsters Lovers</span>
               </div>
             </div>
           </div>
@@ -93,25 +220,23 @@
   </nav>
 
   <script>
-    // Menampilkan nama pengguna dari localStorage
+    // Baca profil user dari rbm_user (hasil login)
     const nameEl = document.getElementById('userName');
-    const storedName = localStorage.getItem('rbm_user_name');
-    if (storedName) {
-        nameEl.textContent = storedName;
-    }
+    try {
+      const user = JSON.parse(localStorage.getItem('rbm_user') || '{}');
+      if (user && user.nama) { nameEl.textContent = user.nama; }
+    } catch(e) {}
 
     // Fungsi "Hapus Akun" akan membersihkan data lokal dan mengarahkan ke halaman login
     document.getElementById('btnDeleteAccount').addEventListener('click', (e) => {
       e.preventDefault();
       if (confirm('Apakah Anda yakin ingin menghapus akun dan semua data lokal? Tindakan ini tidak dapat diurungkan.')) {
-        // Hapus semua data yang terkait dengan pengguna
         localStorage.removeItem('rbm_pending_points');
         localStorage.removeItem('rbm_claimed_points');
         localStorage.removeItem('rbm_user_name');
         
         alert('Akun lokal berhasil dihapus.');
         
-        // Arahkan pengguna kembali ke halaman login
         window.location.href = 'index.html';
       }
     });

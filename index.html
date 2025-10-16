@@ -15,6 +15,16 @@
 </head>
 
 <body class="auth-body">
+  <script>
+    (function(){
+      try{
+        const existing = JSON.parse(localStorage.getItem('rbm_user') || 'null');
+        if (existing && existing.phone) {
+          window.location.replace('home.html');
+        }
+      }catch(e){}
+    })();
+  </script>
   <main class="auth-container">
     <div class="brand">
       <div class="logo">

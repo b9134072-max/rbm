@@ -36,6 +36,15 @@
 
 </head>
 <body>
+<script>
+  (function(){
+    try{
+      var nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+      var isReload = nav ? nav.type === 'reload' : (performance && performance.navigation && performance.navigation.type === 1);
+      if(isReload){ window.location.replace('home.html'); }
+    }catch(e){}
+  })();
+</script>
 <div class="app-container">
   <header class="app-header simple">
     <a href="home.html" class="back-btn" aria-label="Kembali">❮</a>

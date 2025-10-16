@@ -9,41 +9,61 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    /* --- CSS UNTUK POPUP --- */
+    body { font-family: 'Inter', sans-serif; }
+    .reward-card .btn-claim {
+        width: 100%;
+        margin-top: 12px;
+    }
     .popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; visibility: hidden; transition: opacity .2s ease, visibility .2s ease; }
     .popup-overlay.show { opacity: 1; visibility: visible; }
     .popup-box { background: white; padding: 24px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); width: 85%; max-width: 350px; text-align: center; transform: scale(0.9); transition: transform .2s ease; }
     .popup-overlay.show .popup-box { transform: scale(1); }
     .popup-box h3 { margin-top: 0; margin-bottom: 12px; font-size: 1.2rem; color: #333; }
-    .popup-box p { margin-bottom: 24px; color: #666; white-space: pre-wrap; line-height: 1.5; }
-    .popup-buttons { display: flex; flex-direction: column; gap: 10px; }
-    .popup-buttons button, .popup-buttons a { text-decoration: none; display: block; padding: 12px 20px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
-    .popup-buttons .btn-primary { background-color: #25D366; color: white; } /* Warna WhatsApp */
-    .popup-buttons .btn-secondary { background-color: #e0e0e0; color: #333; }
     .empty-state { padding: 40px 20px; text-align: center; color: #888; }
     #qrCodeContainer { margin: 16px 0; display: flex; justify-content: center; }
     #qrCodeContainer img { border: 5px solid #eee; border-radius: 8px; }
+    .popup-buttons { display: flex; gap: 12px; margin-top: 16px; }
+    .popup-buttons button { flex: 1; padding: 12px 20px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+    #closePopupButton { background-color: #e0e0e0; color: #333; }
+    .btn-delete { background-color: #ffebee !important; color: #c62828 !important; }
+    .popup-caption {
+      font-size: 0.8rem;
+      color: #888;
+      margin-top: 12px;
+      margin-bottom: 0;
+    }
   </style>
 </head>
 <body>
+  <script>
+    (function(){
+      try{
+        var nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+        var isReload = nav ? nav.type === 'reload' : (performance && performance.navigation && performance.navigation.type === 1);
+        if(isReload){ window.location.replace('home.html'); }
+      }catch(e){}
+    })();
+  </script>
   <header class="app-header simple">
     <a href="home.html" class="back-btn" aria-label="Kembali">❮</a>
     <h1 class="page-title">Voucher Klaim</h1>
   </header>
 
   <main class="content with-bottom-nav">
-    <nav class="tabs">
-      <button class="tab-btn active" data-target="voucher">Voucher</button>
-      <button class="tab-btn" data-target="merchandise">Merchandise</button>
-    </nav>
-
-    <div id="voucher" class="reward-content active">
-      <div class="reward-grid"></div>
-    </div>
-    <div id="merchandise" class="reward-content">
-      <div class="reward-grid"></div>
-    </div>
+    <div id="rewardContainer" class="reward-grid"></div>
   </main>
+
+  <div id="qrPopup" class="popup-overlay">
+    <div class="popup-box">
+      <h3 id="qrPopupTitle">Tunjukkan ke Kasir</h3>
+      <div id="qrCodeContainer"></div>
+      <div class="popup-buttons">
+        <button id="closePopupButton">Tutup</button>
+        <button id="deletePopupButton" class="btn-delete">Hapus</button>
+      </div>
+      <p class="popup-caption">Klik "Hapus" jika hadiah sudah Anda terima di resto.</p>
+    </div>
+  </div>
 
   <nav class="bottom-nav">
     <a class="bottom-link" href="home.html"> <span class="icon">🏠</span> <span>Home</span> </a>
@@ -54,50 +74,33 @@
     <a class="bottom-link" href="lokasi.html"> <span class="icon">📍</span> <span>Lokasi</span> </a>
   </nav>
 
-  <div id="qrPopup" class="popup-overlay">
-    <div class="popup-box">
-      <h3 id="qrPopupTitle">Klaim Hadiah Anda</h3>
-      <p>Tunjukkan QR Code ini ke kasir, lalu kirim screenshot QR ini via WhatsApp.</p>
-      <div id="qrCodeContainer">
-        </div>
-      <div class="popup-buttons">
-        <a id="waButton" href="#" target="_blank" class="btn-primary">Kirim ke Kasir (WA)</a>
-        <button id="finishClaimButton" class="btn-secondary">Selesai & Tutup</button>
-      </div>
-    </div>
-  </div>
-
   <script>
-    // --- (BAGIAN UTAMA & KONFIGURASI) ---
-    const WA_NUMBER = '6285173350016'; // Ganti dengan nomor WA kasir (awali dengan 62)
-
     document.addEventListener('DOMContentLoaded', () => {
       renderUnclaimedRewards();
-      setupTabs();
-      setupClaimListener();
+      setupListeners();
     });
 
-    // --- (KUMPULAN FUNGSI) ---
+    function getActiveClaims() { return JSON.parse(localStorage.getItem('rbm_active_claims') || '{}'); }
+    function setActiveClaim(itemId, qrData) {
+      const claims = getActiveClaims();
+      claims[itemId] = qrData;
+      localStorage.setItem('rbm_active_claims', JSON.stringify(claims));
+    }
+    function removeActiveClaim(itemId) {
+      const claims = getActiveClaims();
+      delete claims[itemId];
+      localStorage.setItem('rbm_active_claims', JSON.stringify(claims));
+    }
 
     function renderUnclaimedRewards() {
       const unclaimed = JSON.parse(localStorage.getItem('rbm_unclaimed_rewards') || '[]');
-      const voucherGrid = document.querySelector('#voucher .reward-grid');
-      const merchandiseGrid = document.querySelector('#merchandise .reward-grid');
-      const vouchers = unclaimed.filter(item => item.type === 'voucher');
-      const merchandise = unclaimed.filter(item => item.type === 'merchandise');
+      const container = document.getElementById('rewardContainer');
+      container.innerHTML = '';
 
-      voucherGrid.innerHTML = '';
-      merchandiseGrid.innerHTML = '';
-
-      if (vouchers.length > 0) {
-        voucherGrid.innerHTML = vouchers.map(item => createRewardCard(item)).join('');
+      if (unclaimed.length > 0) {
+        container.innerHTML = unclaimed.map(item => createRewardCard(item)).join('');
       } else {
-        voucherGrid.innerHTML = '<div class="empty-state">Tidak ada voucher yang perlu diklaim.</div>';
-      }
-      if (merchandise.length > 0) {
-        merchandiseGrid.innerHTML = merchandise.map(item => createRewardCard(item)).join('');
-      } else {
-        merchandiseGrid.innerHTML = '<div class="empty-state">Tidak ada merchandise yang perlu diklaim.</div>';
+        container.innerHTML = '<div class="empty-state">Tidak ada item yang perlu diklaim.</div>';
       }
     }
 
@@ -108,89 +111,74 @@
           <div class="card-body">
             <h3>${item.nama}</h3>
             <div class="points-cost">Ditukar dengan ${item.point} Poin</div>
-            <button class="btn-tukar btn-claim" data-id="${item.id}" data-name="${item.nama}">Klaim di Resto</button>
+            <button class="btn-tukar btn-claim" data-id="${item.id}" data-name="${item.nama}">Klaim</button>
           </div>
         </div>
       `;
     }
 
-    function setupClaimListener() {
+    function setupListeners() {
       const mainContent = document.querySelector('.content');
       mainContent.addEventListener('click', (event) => {
-        if (event.target.classList.contains('btn-claim')) {
-          const button = event.target;
+        const button = event.target;
+
+        if (button.classList.contains('btn-claim')) {
           const itemId = button.dataset.id;
           const itemName = button.dataset.name;
+          const activeClaims = getActiveClaims();
+          let qrData;
+
+          if (activeClaims[itemId]) {
+            qrData = activeClaims[itemId];
+          } else {
+            const userData = JSON.parse(localStorage.getItem('rbm_user') || '{}');
+            qrData = {
+              claimId: `${itemId}-${new Date().getTime()}`,
+              itemName: itemName,
+              userPhone: userData.phone || 'Tidak diketahui',
+              claimTime: new Date().toLocaleString('id-ID')
+            };
+            setActiveClaim(itemId, qrData);
+          }
           
-          // 1. Ambil data user untuk dimasukkan ke QR
-          const userData = JSON.parse(localStorage.getItem('rbm_user') || '{}');
-          const userPhone = userData.phone || 'Tidak diketahui';
-
-          // 2. Buat data unik untuk QR Code
-          const qrData = {
-            claimId: itemId,
-            itemName: itemName,
-            userPhone: userPhone,
-            claimTime: new Date().toLocaleString('id-ID')
-          };
           const encodedQrData = encodeURIComponent(JSON.stringify(qrData));
-
-          // 3. Buat URL untuk gambar QR Code dari API
           const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodedQrData}`;
-
-          // 4. Buat URL untuk WhatsApp
-          const waText = encodeURIComponent(`Halo, saya ingin klaim hadiah:\n*${itemName}*\n\n(Mohon lampirkan screenshot QR Code)`);
-          const waUrl = `https://wa.me/${WA_NUMBER}?text=${waText}`;
-
-          // 5. Tampilkan popup dengan data yang sudah dibuat
-          showQrPopup(qrImageUrl, waUrl, itemId, itemName);
+          
+          showQrPopup(qrImageUrl, itemName, itemId); 
         }
       });
     }
 
-    function showQrPopup(qrImageUrl, waUrl, itemId, itemName) {
+    function showQrPopup(qrImageUrl, itemName, itemId) {
       const popup = document.getElementById('qrPopup');
       const titleEl = document.getElementById('qrPopupTitle');
       const qrContainer = document.getElementById('qrCodeContainer');
-      const waButton = document.getElementById('waButton');
-      const finishButton = document.getElementById('finishClaimButton');
+      const closeButton = document.getElementById('closePopupButton');
+      const deleteButton = document.getElementById('deletePopupButton');
 
       titleEl.textContent = `Klaim "${itemName}"`;
       qrContainer.innerHTML = `<img src="${qrImageUrl}" alt="QR Code Klaim">`;
-      waButton.href = waUrl;
-      
       popup.classList.add('show');
 
-      // Handler untuk tombol "Selesai & Tutup"
-      finishButton.onclick = () => {
+      closeButton.onclick = () => {
         popup.classList.remove('show');
-        // Hapus item dari daftar setelah popup ditutup
-        processClaim(itemId, itemName);
+      };
+
+      deleteButton.onclick = () => {
+        if (confirm(`Apakah Anda yakin ingin menghapus "${itemName}" dari daftar? Tindakan ini disarankan setelah Anda menerima hadiah.`)) {
+          processAndFinishClaim(itemId);
+          popup.classList.remove('show');
+        }
       };
     }
 
-    function processClaim(itemId, itemName) {
+    function processAndFinishClaim(itemId) {
       let unclaimed = JSON.parse(localStorage.getItem('rbm_unclaimed_rewards') || '[]');
       const updatedUnclaimed = unclaimed.filter(item => item.id != itemId);
       localStorage.setItem('rbm_unclaimed_rewards', JSON.stringify(updatedUnclaimed));
 
-      // Tampilkan ulang daftar hadiah
+      removeActiveClaim(itemId);
       renderUnclaimedRewards();
-      
-      // Beri notifikasi singkat
-      alert(`"${itemName}" telah berhasil diklaim dan dihapus dari daftar.`);
-    }
-
-    function setupTabs() {
-      const tabButtons = document.querySelectorAll('.tab-btn');
-      tabButtons.forEach(button => {
-        button.addEventListener('click', () => {
-          document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-          document.querySelectorAll('.reward-content').forEach(content => content.classList.remove('active'));
-          button.classList.add('active');
-          document.getElementById(button.getAttribute('data-target')).classList.add('active');
-        });
-      });
     }
   </script>
 </body>
