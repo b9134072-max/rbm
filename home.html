@@ -164,7 +164,8 @@
     .all-menu-section { padding: 16px; padding-bottom: 80px; }
     .all-menu-title { margin: 0 0 12px 0; color: var(--primary-text); font-size: 16px; font-weight: 700; }
     .all-menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-    .menu-card { background: var(--card); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); overflow: hidden; }
+    .menu-card { background: var(--card); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); overflow: visible; }
+    .menu-card img { border-radius: 12px 12px 0 0; }
     .menu-card img { width: 100%; height: 110px; object-fit: cover; display: block; }
     .menu-card .body { padding: 10px; display: grid; gap: 6px; }
     .menu-card h3 { font-size: 14px; margin: 0; color: var(--text); }
@@ -200,6 +201,16 @@
     .voucher-icon { font-size: 16px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #f3f4f6, #e5e7eb); border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
     .voucher-title { font-size: 13px; font-weight: 700; color: var(--text); line-height: 1.2; }
     .voucher-divider { width: 1px; height: 24px; background: #e5e7eb; flex-shrink: 0; }
+    /* Badge Favorit */
+    .fav-badge {
+      position: absolute; top: -12px; left: -12px; z-index: 3;
+      background: linear-gradient(135deg, #f59e0b, #ea580c);
+      color: #fff; font-size: 12px; font-weight: 800; letter-spacing: .3px;
+      padding: 5px 10px; border-radius: 14px; display: inline-flex; align-items: center; gap: 6px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.2);
+      border: 2px solid #fff;
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
@@ -219,8 +230,8 @@
       <h1 class="brand-name">Rice Bowl Monster</h1>
       <div class="location-row">
         <span class="location-icon">📍</span>
-        <a href="https://www.google.com/maps/search/?api=1&query=Rice+Bowl+Monsters+Surabaya" class="location-link" target="_blank">
-          Jl. Kemenangan No. 1, Surabaya
+        <a href="#" class="location-link" id="findNearestLocation">
+          Cari Lokasi Terdekat
         </a>
       </div>
     </div>
@@ -327,7 +338,43 @@
         popup.style.display = 'none';
       });
     }
+function findNearestStore() {
+  const locationLink = document.getElementById('findNearestLocation');
+  if (!locationLink) return;
 
+  // Alamat tujuan Rice Bowl Monster
+  const destinationAddress = "Jl. Kemenangan No. 1, Surabaya";
+
+  locationLink.addEventListener('click', (event) => {
+    event.preventDefault(); // Mencegah link membuka halaman baru
+    locationLink.textContent = 'Mencari lokasi...'; // Beri feedback ke user
+
+    if (!navigator.geolocation) {
+      alert('Browser Anda tidak mendukung geolokasi.');
+      locationLink.textContent = 'Cari Lokasi Terdekat';
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const userLatitude = position.coords.latitude;
+        const userLongitude = position.coords.longitude;
+        
+        // Membuat URL Google Maps untuk navigasi
+        const mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${userLatitude},${userLongitude}&destination=${encodeURIComponent(destinationAddress)}`;
+
+        // Buka di tab baru
+        window.open(mapsUrl, '_blank');
+        locationLink.textContent = 'Cari Lokasi Terdekat';
+      },
+      (error) => {
+        console.error("Error mendapatkan lokasi: ", error.message);
+        alert('Gagal mendapatkan lokasi Anda. Pastikan Anda sudah memberikan izin akses lokasi untuk situs ini.');
+        locationLink.textContent = 'Cari Lokasi Terdekat';
+      }
+    );
+  });
+}
     function initPromoSlider() {
       const slider = document.getElementById('promoSlider');
       if (!slider) return;
@@ -353,15 +400,15 @@
 
       const allItems = [
         { name: 'Hot Monsters Beef (Free Ice Tea)', price: 'Rp 39.900', img: 'menu/hotmonstersbeef.jpg', category: 'rice-bowl' },
-        { name: 'Special Monsters Beef (Free Ice Tea)', price: 'Rp 39.900', img: 'menu/Specialmonstersbeef.jpg', category: 'rice-bowl' },
+        { name: 'Special Monsters Beef (Free Ice Tea)', price: 'Rp 39.900', img: 'menu/Specialmonstersbeef.jpg', category: 'rice-bowl', favorite: true },
         { name: 'Honey Sauce Beef (Free Ice Tea)', price: 'Rp 39.900', img: 'menu/Honeysaucepapperbeef.jpg', category: 'rice-bowl' },
         { name: 'Smoked Pepper Beef (Free Ice Tea)', price: 'Rp 39.900', img: 'menu/Semokedpapperbeef.jpg', category: 'rice-bowl' },
         { name: 'Hot Monsters Chicken (Free Ice Tea)', price: 'Rp 26.900', img: 'menu/Hotmonsterschicken.jpg', category: 'rice-bowl' },
-        { name: 'Chicken Teriyaki (Free Ice Tea)', price: 'Rp 26.900', img: 'menu/Chickenteriyaki.jpg', category: 'rice-bowl' },
+        { name: 'Chicken Teriyaki (Free Ice Tea)', price: 'Rp 26.900', img: 'menu/Chickenteriyaki.jpg', category: 'rice-bowl', favorite: true },
         { name: 'Sweet & Sour Chicken (Free Ice Tea)', price: 'Rp 26.900', img: 'menu/Sweet&sourchicken.jpg', category: 'rice-bowl' },
         { name: 'Javanesse Honey Spicy (Free Ice Tea)', price: 'Rp 26.900', img: 'menu/Javanessehoneyspicychicken.jpg', category: 'rice-bowl' },
         { name: 'Chicken Katsu (Free Ice Tea)', price: 'Rp 28.900', img: 'menu/Chickenkatsu.jpg', category: 'rice-bowl' },
-        { name: 'Mie Hot Monsters', price: 'Rp 20.900', img: 'menu/miehotmonsters.jpg', category: 'mie' },
+        { name: 'Mie Hot Monsters', price: 'Rp 20.900', img: 'menu/miehotmonsters.jpg', category: 'mie', favorite: true },
         { name: 'Mie Ayam Monsters', price: 'Rp 20.900', img: 'menu/mieayammonsters.jpg', category: 'mie' },
         { name: 'Mie Ayam Jamur', price: 'Rp 20.900', img: 'menu/mieayamjamur.jpg', category: 'mie' },
         { name: 'Mie Ayam Katsu', price: 'Rp 22.900', img: 'menu/mieayamkatsu.jpg', category: 'mie' },
@@ -369,13 +416,17 @@
         { name: 'Mie Polos', price: 'Rp 15.000', img: 'menu/miepolos.jpg', category: 'mie' },
       ];
 
-      const itemsToRender = category === 'all' 
+      const baseItems = category === 'all' 
         ? allItems 
         : allItems.filter(item => item.category === category);
+      const favItems = baseItems.filter(i => i.favorite);
+      const nonFavItems = baseItems.filter(i => !i.favorite);
+      const itemsToRender = [...favItems, ...nonFavItems];
 
       if (itemsToRender.length > 0) {
         grid.innerHTML = itemsToRender.map(it => (
-          `<a href="menu.html" class="menu-card" style="text-decoration: none;">`+
+          `<a href="menu.html" class="menu-card" style="text-decoration: none; position: relative;">`+
+          `${it.favorite ? '<div class=\"fav-badge\">★ Favorit</div>' : ''}`+
           `<img src="${it.img}" alt="${it.name}" loading="lazy">`+
           `<div class="body"><h3>${it.name}</h3><div class="price">${it.price}</div></div>`+
           `</a>`
@@ -470,19 +521,22 @@ function handleHeaderScroll() {
       renderAllMenu();
       loadPendingPoints();
       handleHeaderScroll(); // <-- Panggil fungsi header scroll
+      findNearestStore(); // <-- TAMBAHKAN PANGGILAN FUNGSI INI
 
-      const cachedUserData = JSON.parse(localStorage.getItem('rbm_user') || '{}');
-      
+      const cachedUserData = JSON.parse(localStorage.getItem('rbm_user') || 'null');
+
       if (!cachedUserData || !cachedUserData.phone) {
-        window.location.href = 'index.html';
-        return;
+        // Pengunjung belum login: tampilkan placeholder
+        document.getElementById('userName').textContent = 'Monsters Lovers';
+        document.getElementById('userPoints').textContent = '0';
+        return; // Tetap di beranda tanpa memaksa login
       }
-      
+
       document.getElementById('userName').textContent = cachedUserData.nama || 'Pengguna';
-      document.getElementById('userPoints').textContent = cachedUserData.points || '...';
+      document.getElementById('userPoints').textContent = cachedUserData.points || '0';
 
       const syncSuccess = await syncUserDataFromSheets(cachedUserData.phone);
-      
+
       if (!syncSuccess) {
         console.log('Gagal sinkronisasi, menampilkan data dari cache.');
         displayUserData(cachedUserData);

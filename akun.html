@@ -220,31 +220,61 @@
   </nav>
 
   <script>
-    // Baca profil user dari rbm_user (hasil login)
+    // Toggle Login/Logout di halaman Akun
     const nameEl = document.getElementById('userName');
-    try {
-      const user = JSON.parse(localStorage.getItem('rbm_user') || '{}');
-      if (user && user.nama) { nameEl.textContent = user.nama; }
-    } catch(e) {}
+    const logoutBtn = document.getElementById('btnLogout');
+    const deleteBtn = document.getElementById('btnDeleteAccount');
 
-    // Fungsi "Hapus Akun" akan membersihkan data lokal dan mengarahkan ke halaman login
-    document.getElementById('btnDeleteAccount').addEventListener('click', (e) => {
+    function getUser() {
+      try { return JSON.parse(localStorage.getItem('rbm_user') || 'null'); } catch(_) { return null; }
+    }
+
+    function setLoggedOutView() {
+      if (nameEl) nameEl.textContent = 'Monsters Lovers';
+      if (logoutBtn) logoutBtn.querySelector('.action-label').textContent = 'Login';
+    }
+
+    function setLoggedInView(user) {
+      if (user && user.nama && nameEl) nameEl.textContent = user.nama;
+      if (logoutBtn) logoutBtn.querySelector('.action-label').textContent = 'Logout';
+    }
+
+    (function initAccountPage(){
+      const user = getUser();
+      if (!user || !user.phone) {
+        setLoggedOutView();
+      } else {
+        setLoggedInView(user);
+      }
+    })();
+
+    // Hapus Akun: bersihkan semua data lokal termasuk sesi, lalu ke login
+    deleteBtn.addEventListener('click', (e) => {
       e.preventDefault();
       if (confirm('Apakah Anda yakin ingin menghapus akun dan semua data lokal? Tindakan ini tidak dapat diurungkan.')) {
         localStorage.removeItem('rbm_pending_points');
         localStorage.removeItem('rbm_claimed_points');
         localStorage.removeItem('rbm_user_name');
-        
+        localStorage.removeItem('rbm_user');
         alert('Akun lokal berhasil dihapus.');
-        
         window.location.href = 'index.html';
       }
     });
 
-    // Fungsi "Logout" hanya mengarahkan ke halaman login
-    document.getElementById('btnLogout').addEventListener('click', (e) => {
+    // Toggle Login/Logout: jika belum login → ke halaman login, jika sudah → logout dan kembali ke beranda
+    logoutBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      window.location.href = 'index.html';
+      const user = getUser();
+      if (!user || !user.phone) {
+        // Belum login → masuk
+        window.location.href = 'index.html';
+        return;
+      }
+      // Sudah login → logout
+      localStorage.removeItem('rbm_user');
+      // Tidak menghapus data lain di sini; gunakan "Hapus Akun" untuk bersih total
+      setLoggedOutView();
+      window.location.href = 'home.html';
     });
   </script>
 </body>
