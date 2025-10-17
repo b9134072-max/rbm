@@ -460,15 +460,17 @@ body {
 /* === Bottom Navigation === */
 .bottom-nav {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  bottom: 16px; /* Memberi jarak dari bawah layar */
+  left: 16px; /* Memberi jarak dari kiri layar */
+  right: 16px; /* Memberi jarak dari kanan layar */
   background: var(--card);
-  border-top: 1px solid var(--border);
+  border-top: none; /* Menghapus garis di bagian atas */
+  border-radius: 50px; /* Membuat ujungnya melengkung seperti pil */
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   padding: 6px 8px;
   z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15); /* Menambah bayangan agar terlihat melayang */
 }
 .bottom-link {
   display: flex;

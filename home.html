@@ -13,13 +13,13 @@
 
   <style>
     :root {
-      --bg: #4C2A85;
+      --bg: #ffffff;
       --card: #ffffff;
       --text: #374151;
       --muted: #6b7280;
       --primary: #4C2A85;
       --primary-text: #ffffff;
-      --border: #e5e7eb00;
+      --border: #e5e7eb;
     }
     * { box-sizing: border-box; }
     body {
@@ -35,18 +35,234 @@
     .popup-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background-color: rgba(0, 0, 0, 0.7); z-index: 2000; display: none;
-      justify-content: center; align-items: center; padding: 16px;
+      justify-content: center; align-items: center; padding: 16px; 
+      opacity: 0; transition: opacity 0.3s ease; /* Transisi halus */
+    }
+    .popup-overlay.show {
+      opacity: 1;
     }
     .popup-content {
-      background: transparent; box-shadow: none; max-width: 250px;
-      width: 100%; position: relative;
+      background: transparent; box-shadow: none; max-width: 300px; /* Sedikit diperbesar */
+      width: 100%; position: relative; transform: scale(0.9); transition: transform 0.3s ease;
     }
     .popup-content img { width: 100%; }
     .popup-close {
-      position: absolute; top: -15px; right: -15px; background: rgb(255, 255, 255); border: none;
-      width: 36px; height: 36px; border-radius: 50%; font-size: 20px; font-weight: bold;
-      color: #4C2A85; cursor: pointer; display: flex; justify-content: center;
-      align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      background: #f3f4f6; border: none;
+      width: 32px; height: 32px; border-radius: 50%; font-size: 18px; font-weight: bold;
+      color: var(--text); cursor: pointer; display: flex; justify-content: center;
+      align-items: center; transition: all 0.2s ease;
+      position: absolute; /* Posisi absolut */
+      top: -12px; /* Sedikit di atas */
+      right: -12px; /* Sedikit di kanan */
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    
+    .popup-close:hover {
+      background: #e5e7eb;
+      transform: scale(1.1);
+    }
+    
+    .menu-detail-header {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 16px;
+    }
+    
+    /* Menu Detail Popup Styles */
+    .menu-detail-popup {
+      background: var(--card);
+      border-radius: 16px;
+      max-width: 320px;
+      width: 85%;
+      height: auto;
+      max-height: 90vh;
+      overflow: visible;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+    
+    .menu-detail-content {
+      padding: 12px;
+    }
+    
+    .menu-detail-image {
+      width: 100%;
+      height: 120px;
+      object-fit: contain; /* prevent cropping */
+      background: #ffffff; /* letterbox background */
+      border-radius: 12px;
+      margin-bottom: 8px;
+    }
+    
+    .menu-detail-info h2 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0 0 4px 0;
+      line-height: 1.2;
+    }
+    
+    .menu-detail-price {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+    
+    .menu-detail-category {
+      font-size: 11px;
+      color: var(--muted);
+      background: #f3f4f6;
+      padding: 2px 6px;
+      border-radius: 10px;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+    
+    .menu-detail-description {
+      font-size: 12px;
+      line-height: 1.3;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+    
+    .menu-detail-actions {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .btn-order {
+      flex: 1;
+      background: linear-gradient(135deg, var(--primary), #5a2d9a);
+      color: var(--primary-text);
+      border: none;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-order:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(76, 42, 133, 0.4);
+    }
+    
+    .btn-favorite {
+      background: #f3f4f6;
+      color: var(--text);
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-favorite:hover {
+      background: #fee2e2;
+      border-color: #fca5a5;
+      color: #dc2626;
+    }
+    
+    /* Favorites Popup Styles */
+    .favorites-popup {
+      background: var(--card);
+      border-radius: 16px;
+      max-width: 320px;
+      width: 85%;
+      max-height: 60vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+    
+    .favorites-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 16px 0 16px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+    
+    .favorites-header h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0;
+    }
+    
+    .favorites-content {
+      padding: 0 16px 16px 16px;
+    }
+    
+    .favorite-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 12px;
+      background: #fafafa;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .favorite-item:hover {
+      background: #f3f4f6;
+      transform: translateY(-1px);
+    }
+    
+    .favorite-item img {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    
+    .favorite-item-info {
+      flex: 1;
+    }
+    
+    .favorite-item-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin: 0 0 4px 0;
+    }
+    
+    .favorite-item-price {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    
+    .favorite-item-remove {
+      background: #fee2e2;
+      color: #dc2626;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 8px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .favorite-item-remove:hover {
+      background: #fecaca;
+    }
+    
+    .empty-favorites {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--muted);
+    }
+    
+    .empty-favorites-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
     }
     
     .app-header {
@@ -123,7 +339,7 @@
       z-index: 1;
     }
     .promo-item img { 
-      width: 100%; height: 250px; object-fit: cover; 
+      width: 100%; height: 175px; object-fit: cover; 
       display: block; border-radius: 0 0 16px 16px;
     }
     
@@ -131,7 +347,7 @@
   display: flex;
   overflow-x: auto;
   gap: 20px; 
-  padding: 0 16px 16px 16px;
+  padding: 0 0px 09px 0px;
   text-align: center;
   background: var(--bg);
   margin-top: -10px;
@@ -140,23 +356,23 @@
   scrollbar-width: none;
   
   position: sticky;
-  top: 64px; /* sama dengan tinggi header */
+  top: 50px; /* sama dengan tinggi header */
   z-index: 999; /* Pastikan ia di atas konten menu di bawahnya */
 }
   
     .menu-icon { 
-      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      display: flex; flex-direction: column; align-items: center; gap: 5px;
       text-decoration: none; cursor: pointer; 
     }
     .menu-emoji { 
-      width: 56px; height: 56px; border-radius: 16px; background-color: var(--card);
-      display: grid; place-items: center; font-size: 28px;
+      width: 48px; height: 48px; border-radius: 16px; background-color: var(--card);
+      display: grid; place-items: center; font-size: 24px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.08); transition: transform 0.2s, box-shadow 0.2s;
     }
-    .menu-icon span { font-size: 12px; font-weight: 600; color: var(--primary-text); }
+    .menu-icon span { font-size: 12px; font-weight: 600; color: var(--primary-text); max-width: 100%;display: block;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
     
     .menu-icon .menu-emoji.active {
-      transform: scale(1.1);
+      transform: scale(1.05);
       box-shadow: 0 6px 16px rgba(76, 42, 133, 0.5);
       background-color: #f0e9ff;
     }
@@ -165,11 +381,50 @@
     .all-menu-title { margin: 0 0 12px 0; color: var(--primary-text); font-size: 16px; font-weight: 700; }
     .all-menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
     .menu-card { background: var(--card); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); overflow: visible; }
-    .menu-card img { border-radius: 12px 12px 0 0; }
+    .menu-card img { border-radius: 12px 12px 0 0; border: 1px solid #f3f4f6; }
     .menu-card img { width: 100%; height: 110px; object-fit: cover; display: block; }
     .menu-card .body { padding: 10px; display: grid; gap: 6px; }
     .menu-card h3 { font-size: 14px; margin: 0; color: var(--text); }
     .menu-card .price { font-size: 13px; font-weight: 700; color: var(--primary); }
+
+    /* Grouped menu styles */
+    .grouped-menu-section { padding: 16px; padding-bottom: 80px; }
+    .group-block { margin-bottom: 12px; }
+    .group-title { 
+      margin: 0 0 10px 0; 
+      font-size: 18px; /* Sedikit diperbesar */
+      font-weight: 800; 
+      color: var(--primary); /* Diubah agar kontras dengan background */
+    }
+.h-scroll { 
+  display: flex; 
+  gap: 10px; 
+  overflow-x: auto; 
+  scroll-snap-type: x proximity; 
+  /* Menghapus margin negatif untuk membuat scroll dimulai dari padding container */
+  margin-left: -5px;
+  margin-right: -16px;
+  /* Menambahkan padding agar kartu tidak menempel di tepi dan bayangan terlihat */
+  padding: 15px 16px 10px 16px;
+
+  overflow-y: visible; /* <-- PENTING: Untuk memastikan konten vertikal tidak terpotong */
+}
+    .h-scroll::-webkit-scrollbar { display: none; }
+.h-card { 
+  flex: 0 0 160px; 
+  scroll-snap-align: start; 
+  border-radius: 12px; 
+  background: var(--card);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); /* Bayangan dibuat lebih tebal */
+  border: 1px solid var(--border);
+  cursor: pointer;
+  position: relative;
+  /* Pastikan tidak ada "overflow: hidden" di sini */
+}
+    .h-card img { width: 100%; height: 110px; object-fit: cover; border-radius: 12px 12px 0 0; display: block; }
+    .h-card .body { padding: 8px; }
+    .h-card .body h3 { font-size: 13px; margin: 0 0 4px 0; color: var(--text); }
+    .h-card .body .price { font-size: 12px; font-weight: 700; color: var(--primary); }
     
     /* Sisa CSS Anda tetap sama... (user-profile, voucher, dll.) */
     .user-profile-section { padding: 0 16px; margin-bottom: 20px; }
@@ -180,9 +435,36 @@
     .welcome-text { display: flex; align-items: center; gap: 4px; }
     .hello-text { font-size: 16px; font-weight: 400; color: var(--text); }
     .user-name { font-size: 16px; font-weight: 700; color: var(--primary); }
-    .points-display { display: flex; align-items: center; gap: 8px; }
-    .points-label { font-size: 14px; font-weight: 500; color: var(--muted); }
-    .points-value { font-size: 14px; font-weight: 700; color: var(--primary); background: linear-gradient(135deg, #f3f4f6, #e5e7eb); padding: 5px 12px; border-radius: 20px; border: 1px solid #d1d5db; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .points-display {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .points-icon {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+    }
+    .points-text-container {
+      display: flex;
+      flex-direction: column;
+    }
+    .points-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      margin: 0;
+    }
+    .points-value {
+      font-size: 18px; /* DIUBAH: Ukuran font diperkecil */
+      font-weight: 700;
+      color: var(--primary);
+      background: none;
+      padding: 0;
+      border: none;
+      box-shadow: none;
+      line-height: 1.2;
+    }
     .pending-points-row { margin-top: 6px; display: flex; align-items: center; gap: 8px; }
     .pending-label { font-size: 13px; color: var(--muted); }
     .pending-value { font-size: 13px; font-weight: 700; color: #b45309; background: linear-gradient(135deg, #fff7ed, #ffedd5); padding: 4px 10px; border-radius: 16px; border: 1px solid #fed7aa; }
@@ -193,8 +475,8 @@
     .exchange-btn:active { transform: translateY(-1px); }
     .exchange-icon { font-size: 18px; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1)); }
     .exchange-text { font-size: 14px; font-weight: 600; letter-spacing: 0.5px; }
-    .voucher-section { padding: 0 16px; margin-bottom: 20px; }
-    .voucher-card { background: var(--card); border-radius: 10px; padding: 8px 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); width: 100%; }
+    .voucher-section { padding: 0 16px; margin-bottom: 10px; }
+    .voucher-card { background: var(--card); border-radius: 10px; padding: 8px 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 100%; }
     .voucher-content { display: flex; align-items: center; gap: 12px; }
     .voucher-item { display: flex; align-items: center; gap: 8px; text-decoration: none; flex: 1; padding: 6px 8px; border-radius: 6px; transition: all 0.2s ease; }
     .voucher-item:hover { background: #f8f9fa; transform: translateY(-1px); }
@@ -202,23 +484,199 @@
     .voucher-title { font-size: 13px; font-weight: 700; color: var(--text); line-height: 1.2; }
     .voucher-divider { width: 1px; height: 24px; background: #e5e7eb; flex-shrink: 0; }
     /* Badge Favorit */
-    .fav-badge {
-      position: absolute; top: -12px; left: -12px; z-index: 3;
-      background: linear-gradient(135deg, #f59e0b, #ea580c);
-      color: #fff; font-size: 12px; font-weight: 800; letter-spacing: .3px;
-      padding: 5px 10px; border-radius: 14px; display: inline-flex; align-items: center; gap: 6px;
-      box-shadow: 0 2px 10px rgba(0,0,0,.2);
-      border: 2px solid #fff;
-      pointer-events: none;
-    }
-  </style>
-</head>
-<body>
+/* == GAYA BADGE PITA - SUDUT LEBIH TAJAM == */
+.fav-badge {
+  position: absolute;
+  top: 0;
+  left: -5px;
+  transform: translateY(-75%);
+  z-index: 9;
+  
+  /* Tampilan Pita */
+  background: #6b7280;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 3px 12px 3px 12px;
+  box-shadow: -2px 3px 8px rgba(0,0,0,0.3);
+  border-radius: 0 9px 9px 0; /* <-- DIUBAH MENJADI 2px AGAR LEBIH TAJAM */
+  pointer-events: none;
+}
 
+/* Lipatan 3D (tidak perlu diubah) */
+.fav-badge::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  z-index: -1;
+  border-top: 6px solid #4b5563;
+  border-left: 6px solid transparent; 
+}
+  </style>
+<style>
+  /* CSS BARU UNTUK PROFIL PENGGUNA (DESAIN LEBIH BAIK) */
+  .user-profile-section {
+    padding: 0 16px;
+    margin-top: -10px;
+    position: relative;
+    z-index: 2;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Jarak antara kotak atas dan bawah */
+  }
+  .welcome-card {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 8px 20px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.12);
+    border: 1px solid var(--border);
+  }
+  .actions-grid {
+    display: flex; /* Menggunakan flexbox untuk tinggi yang sama */
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .action-card {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 16px; 
+    box-shadow: 0 6px 15px rgba(0,0,0,0.12);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    text-decoration: none;
+    color: var(--text);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid var(--border);
+  }
+  .action-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+  }
+  .action-card .points-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--primary);
+  }
+  .action-card .exchange-text { font-weight: 600; }
+</style>
+</head>
+<style>
+  /* [BARU] CSS untuk tombol Tukar Poin yang baru */
+  .exchange-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none;
+    flex: 1;
+  }
+  .exchange-card .exchange-text {
+    font-weight: 700;
+  }
+</style>
+<style>
+  /* [BARU] CSS untuk Kartu Promo Spesial */
+  .special-offer-section {
+    padding: 0 16px; /* Menjaga padding kiri-kanan */
+    margin-bottom: 20px; /* Jarak ke bawah */
+  }
+  .special-offer-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Membuat 3 kolom */
+    gap: 10px; /* Jarak antar kartu */
+  }
+  .special-offer-card {
+    display: flex; /* Mengubah ke flexbox */
+    flex-direction: column; /* Arah tumpukan vertikal */
+    background: var(--card);
+    border-radius: 16px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    color: var(--text);
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    overflow: hidden; /* Agar gambar tidak keluar dari border-radius */
+    border: 1px solid var(--border);
+  }
+  .special-offer-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  }
+  .offer-image {
+    width: 100%; /* Lebar penuh */
+    height: 70px; /* Tinggi gambar disesuaikan */
+  }
+  .offer-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .offer-details {
+    padding: 10px; /* Padding untuk teks */
+    text-align: center; /* Teks di tengah */
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .offer-title { font-size: 13px; font-weight: 700; margin: 0; line-height: 1.3; }
+  .offer-description { display: none; } /* Deskripsi disembunyikan agar lebih ringkas */
+</style>
+<body>
   <div class="popup-overlay" id="promoPopup">
     <div class="popup-content">
       <img src="promo.png" alt="Promo Spesial">
       <button class="popup-close" id="promoCloseBtn" aria-label="Tutup">X</button>
+    </div>
+  </div>
+  <!-- [BARU] Popup Promo -->
+  <div class="popup-overlay" id="promoPopup">
+    <div class="popup-content" id="promoPopupContent">
+      <!-- Tombol tutup sekarang di luar <a> tapi di dalam .popup-content -->
+      <button class="popup-close" id="promoCloseBtn" aria-label="Tutup">×</button>
+      <a href="menu.html?cat=rice-bowl">
+        <img src="promo.png" alt="Promo Gratis Es Teh untuk pembelian Rice Bowl & Mie">
+      </a>
+    </div>
+  </div>
+
+  <div class="popup-overlay" id="menuDetailPopup">
+    <div class="popup-content menu-detail-popup">
+      <div class="menu-detail-content">
+        <div class="menu-detail-header">
+          <button class="popup-close" id="menuDetailCloseBtn" aria-label="Tutup">×</button>
+        </div>
+        <img id="menuDetailImage" src="" alt="" class="menu-detail-image">
+        <div class="menu-detail-info">
+          <h2 id="menuDetailName"></h2>
+          <div id="menuDetailPrice" class="menu-detail-price"></div>
+          <div id="menuDetailCategory" class="menu-detail-category"></div>
+          <p id="menuDetailDescription" class="menu-detail-description"></p>
+          <div class="menu-detail-actions">
+            <button class="btn-order" id="orderBtn">Pesan Sekarang</button>
+            <button class="btn-favorite" id="favoriteBtn">❤️ Favorit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Favorites Popup -->
+  <div class="popup-overlay" id="favoritesPopup">
+    <div class="popup-content favorites-popup">
+      <div class="favorites-header">
+        <h2>Menu Favorit Anda</h2>
+        <button class="popup-close" id="favoritesCloseBtn" aria-label="Tutup">×</button>
+      </div>
+      <div class="favorites-content" id="favoritesList">
+        <!-- Favorites will be populated here -->
+      </div>
     </div>
   </div>
 
@@ -235,8 +693,8 @@
         </a>
       </div>
     </div>
-    <button class="notification-btn" id="notificationBtn" aria-label="Notifikasi">
-      🔔
+    <button class="notification-btn" id="favoritesBtn" aria-label="Menu Favorit">
+      ❤️
     </button>
   </header>
 
@@ -250,78 +708,94 @@
     </section>
 
     <section class="user-profile-section">
-      <div class="user-profile-card">
-        <div class="profile-content">
-          <div class="profile-left">
-            <div class="welcome-text">
-              <span class="hello-text">Hello, </span>
-              <span class="user-name" id="userName">Loading...</span>
-            </div>
-            <div class="points-display">
-              <span class="points-label">Poin Anda:</span>
-              <span class="points-value" id="userPoints">0</span>
-            </div>
+      <!-- Kotak panjang untuk sapaan -->
+      <div class="welcome-card">
+        <div class="welcome-text">
+          <span class="hello-text">Hello, </span>
+          <span class="user-name" id="userName">Loading...</span>
+        </div>
+      </div>
+      <!-- Grid untuk poin dan tombol tukar -->
+      <div class="actions-grid">
+        <!-- URUTAN DIUBAH: Teks dulu, baru gambar -->
+        <div class="points-display welcome-card">
+          <div class="points-text-container">
+            <span class="points-label">Poin Anda:</span>
+            <span class="points-value" id="userPoints">0</span>
           </div>
-          <div class="profile-right">
-            <button class="exchange-btn" id="exchangeBtn">
-              <span class="exchange-icon">🎁</span>
-              <span class="exchange-text">Tukar Poin</span>
-            </button>
+          <img src="logo-rbm.png" alt="Poin" class="points-icon">
+        </div>
+        <!-- DIUBAH: Tombol Tukar Poin sekarang menjadi kartu yang mirip -->
+        <a href="tukarpoint.html" class="exchange-card welcome-card">
+          <span class="exchange-text">Tukar Poin</span>
+          <img src="logo-rbm.png" alt="Tukar Poin" class="points-icon">
+        </a>
+      </div>
+    </section>
+
+    <!-- [BARU] Bagian Promo Spesial -->
+    <section class="special-offer-section">
+      <div class="special-offer-grid">
+        <!-- Promo 1 -->
+        <a href="menu.html?cat=mie" class="special-offer-card">
+          <div class="offer-image">
+            <img src="menu/miehotmonsters.jpg" alt="Promo Mie Hot Monsters">
           </div>
+          <div class="offer-details">
+            <h3 class="offer-title">Spesial Hari Ini!</h3>
+          </div>
+        </a>
+        <!-- Promo 2 -->
+        <a href="menu.html?cat=rice-bowl" class="special-offer-card">
+          <div class="offer-image">
+            <img src="menu/Specialmonstersbeef.jpg" alt="Promo Beef Bowl">
+          </div>
+          <div class="offer-details">
+            <h3 class="offer-title">Gratis Es Teh</h3>
+          </div>
+        </a>
+        <!-- Promo 3 -->
+        <a href="tukarpoint.html" class="special-offer-card">
+          <div class="offer-image">
+            <img src="rewards/gantungan-kunci.jpg" alt="Promo Tukar Poin">
+          </div>
+          <div class="offer-details">
+            <h3 class="offer-title">Tukar Poinmu</h3>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- DIUBAH: Bagian voucher sekarang menampilkan informasi lokasi -->
+    <section class="voucher-section"> <!-- Nama kelas section tetap sama, tapi isinya berubah -->
+      <div class="voucher-card"> <!-- Nama kelas card tetap sama -->
+        <div class="voucher-content"> <!-- Nama kelas content tetap sama -->
+          <a href="lokasi.html" class="voucher-item" aria-label="Lokasi Surabaya">
+            <div class="voucher-icon">📍</div> <!-- Ikon diubah menjadi lokasi -->
+            <span class="voucher-title">Lokasi Surabaya</span> <!-- Teks diubah -->
+          </a>
+          <div class="voucher-divider"></div> <!-- Pembatas tetap ada -->
+          <a href="lokasi.html" class="voucher-item" aria-label="Lokasi Sidoarjo">
+            <div class="voucher-icon">📍</div> <!-- Ikon diubah menjadi lokasi -->
+            <span class="voucher-title">Lokasi Sidoarjo</span> <!-- Teks diubah -->
+          </a>
         </div>
       </div>
     </section>
 
-    <section class="voucher-section">
-      <div class="voucher-card">
-        <div class="voucher-content">
-          <a href="tukarpoint.html?tab=merchandise" class="voucher-item" aria-label="Merchandise">
-            <div class="voucher-icon">🏆</div>
-            <span class="voucher-title">Merchandise</span>
-          </a>
-          <div class="voucher-divider"></div>
-          <a href="tukarpoint.html?tab=voucher" class="voucher-item" aria-label="Voucher">
-            <div class="voucher-icon">🎫</div>
-            <span class="voucher-title">Voucher</span>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <section class="menu-icons">
-      <div class="menu-icon category-filter" data-category="all" aria-label="Semua Menu">
-          <div class="menu-emoji active">⭐</div><span>Semua</span>
-      </div>
-      <div class="menu-icon category-filter" data-category="rice-bowl" aria-label="Rice Bowl">
-          <div class="menu-emoji">🍚</div><span>Rice Bowl</span>
-      </div>
-      <div class="menu-icon category-filter" data-category="mie" aria-label="Mie">
-          <div class="menu-emoji">🍜</div><span>Mie</span>
-      </div>
-      <div class="menu-icon category-filter" data-category="minuman" aria-label="Minuman">
-          <div class="menu-emoji">🥤</div><span>Minuman</span>
-      </div>
-      <div class="menu-icon category-filter" data-category="es-vampur" aria-label="Es Vampur">
-          <div class="menu-emoji">🧊</div><span>Es Vampur</span>
-      </div>
-      <div class="menu-icon category-filter" data-category="gorengan" aria-label="Gorengan">
-          <div class="menu-emoji">🍤</div><span>Gorengan</span>
-      </div>
-    </section>
     
-    <section class="all-menu-section">
-      <h2 class="all-menu-title">Semua Menu</h2>
-      <div class="all-menu-grid" id="allMenuGrid"></div>
+    
+    <section class="grouped-menu-section">
+      <div id="groupedMenuContainer"></div>
     </section>
   </main>
 
   <nav class="bottom-nav">
     <a class="bottom-link active" href="home.html"> <span class="icon">🏠</span> <span>Home</span> </a>
-    <a class="bottom-link" href="menu.html"> <span class="icon">🍽️</span> <span>Menu</span> </a>
-    <a class="bottom-link" href="akun.html"> <span class="icon">👤</span> <span>Akun</span> </a>
     <a class="bottom-link" href="tukarpoint.html"> <span class="icon">🎁</span> <span>Tukar</span> </a>
     <a class="bottom-link" href="klaim.html"> <span class="icon">🎫</span> <span>Vcr Klaim</span> </a>
     <a class="bottom-link" href="lokasi.html"> <span class="icon">📍</span> <span>Lokasi</span> </a>
+    <a class="bottom-link" href="akun.html"> <span class="icon">👤</span> <span>Akun</span> </a>
   </nav>
 
   <script>
@@ -329,15 +803,173 @@
     
     function handlePromoPopup() {
       const popup = document.getElementById('promoPopup');
+      const popupContent = document.querySelector('#promoPopup .popup-content');
       const closeBtn = document.getElementById('promoCloseBtn');
       if (!popup || !closeBtn) return;
 
-      popup.style.display = 'flex'; 
+      // Tampilkan popup dengan efek
+      popup.style.display = 'flex';
+      setTimeout(() => {
+        popup.classList.add('show');
+        if (popupContent) popupContent.style.transform = 'scale(1)';
+      }, 10);
 
       closeBtn.addEventListener('click', () => {
         popup.style.display = 'none';
+        popup.classList.remove('show');
       });
     }
+    function showMenuDetail(menuData) {
+      const popup = document.getElementById('menuDetailPopup');
+      const closeBtn = document.getElementById('menuDetailCloseBtn');
+      const orderBtn = document.getElementById('orderBtn');
+      const favoriteBtn = document.getElementById('favoriteBtn');
+      
+      if (!popup) return;
+
+      // Populate popup with menu data
+      document.getElementById('menuDetailImage').src = menuData.img;
+      document.getElementById('menuDetailImage').alt = menuData.name;
+      document.getElementById('menuDetailName').textContent = menuData.name;
+      document.getElementById('menuDetailPrice').textContent = menuData.price;
+      
+      // Set category display
+      const categoryNames = {
+        'rice-bowl': 'Rice Bowl',
+        'mie': 'Mie',
+        'minuman': 'Minuman',
+        'es-vampur': 'Es Vampur',
+        'gorengan': 'Gorengan'
+      };
+      document.getElementById('menuDetailCategory').textContent = categoryNames[menuData.category] || menuData.category;
+      
+      // Use description from menu data
+      document.getElementById('menuDetailDescription').textContent = menuData.description || 'Hidangan lezat dari Rice Bowl Monster.';
+
+      // Show popup
+      popup.style.display = 'flex';
+
+      // Update favorite button state
+      updateFavoriteButton(favoriteBtn, menuData);
+
+      // Close popup when clicking close button
+      closeBtn.onclick = () => {
+        popup.style.display = 'none';
+      };
+
+      // Close popup when clicking outside
+      popup.onclick = (e) => {
+        if (e.target === popup) {
+          popup.style.display = 'none';
+        }
+      };
+
+      // Order button action
+      orderBtn.onclick = () => {
+        alert(`Memesan: ${menuData.name}\nHarga: ${menuData.price}\n\nFitur pemesanan akan segera tersedia!`);
+      };
+
+      // Favorite button action
+      favoriteBtn.onclick = () => {
+        toggleFavorite(menuData);
+        updateFavoriteButton(favoriteBtn, menuData);
+      };
+    }
+
+    // Favorites Management Functions
+    function getFavorites() {
+      return JSON.parse(localStorage.getItem('rbm_favorites') || '[]');
+    }
+
+    function saveFavorites(favorites) {
+      localStorage.setItem('rbm_favorites', JSON.stringify(favorites));
+    }
+
+    function toggleFavorite(menuData) {
+      const favorites = getFavorites();
+      const existingIndex = favorites.findIndex(fav => fav.name === menuData.name);
+      
+      if (existingIndex > -1) {
+        // Remove from favorites
+        favorites.splice(existingIndex, 1);
+      } else {
+        // Add to favorites
+        favorites.push(menuData);
+      }
+      
+      saveFavorites(favorites);
+    }
+
+    function isFavorite(menuData) {
+      const favorites = getFavorites();
+      return favorites.some(fav => fav.name === menuData.name);
+    }
+
+    function updateFavoriteButton(button, menuData) {
+      const isFav = isFavorite(menuData);
+      if (isFav) {
+        button.classList.add('favorited');
+        button.textContent = '❤️ Favorit';
+        button.style.background = '#fee2e2';
+        button.style.color = '#dc2626';
+      } else {
+        button.classList.remove('favorited');
+        button.textContent = '❤️ Favorit';
+        button.style.background = '#f3f4f6';
+        button.style.color = 'var(--text)';
+      }
+    }
+
+    function showFavorites() {
+      const popup = document.getElementById('favoritesPopup');
+      const closeBtn = document.getElementById('favoritesCloseBtn');
+      const favoritesList = document.getElementById('favoritesList');
+      
+      if (!popup) return;
+
+      const favorites = getFavorites();
+      
+      if (favorites.length === 0) {
+        favoritesList.innerHTML = `
+          <div class="empty-favorites">
+            <div class="empty-favorites-icon">❤️</div>
+            <p>Belum ada menu favorit</p>
+            <p style="font-size: 14px; margin-top: 8px;">Klik tombol ❤️ pada menu untuk menambahkannya ke favorit</p>
+          </div>
+        `;
+      } else {
+        favoritesList.innerHTML = favorites.map(fav => `
+          <div class="favorite-item" onclick="showMenuDetail(${JSON.stringify(fav).replace(/"/g, '&quot;')})">
+            <img src="${fav.img}" alt="${fav.name}">
+            <div class="favorite-item-info">
+              <div class="favorite-item-name">${fav.name}</div>
+              <div class="favorite-item-price">${fav.price}</div>
+            </div>
+            <button class="favorite-item-remove" onclick="event.stopPropagation(); removeFavorite('${fav.name}')">Hapus</button>
+          </div>
+        `).join('');
+      }
+
+      popup.style.display = 'flex';
+
+      closeBtn.onclick = () => {
+        popup.style.display = 'none';
+      };
+
+      popup.onclick = (e) => {
+        if (e.target === popup) {
+          popup.style.display = 'none';
+        }
+      };
+    }
+
+    function removeFavorite(menuName) {
+      const favorites = getFavorites();
+      const updatedFavorites = favorites.filter(fav => fav.name !== menuName);
+      saveFavorites(updatedFavorites);
+      showFavorites(); // Refresh the favorites list
+    }
+
 function findNearestStore() {
   const locationLink = document.getElementById('findNearestLocation');
   if (!locationLink) return;
@@ -387,53 +1019,63 @@ function findNearestStore() {
       }, 3000);
     }
 
-    function initExchangeButton() {
-      const exchangeBtn = document.getElementById('exchangeBtn');
-      if (exchangeBtn) {
-        exchangeBtn.addEventListener('click', () => { window.location.href = 'tukarpoint.html'; });
-      }
+    function getAllItems() {
+      return [
+        { name: 'Hot Monsters Beef (Free Ice Tea)', price: 'Rp 39.900', img: 'menu/Hotmonstersbeef.jpg', category: 'rice-bowl', description: 'Nasi dengan daging sapi pedas khas Monster, dilengkapi dengan es teh gratis.' },
+        { name: 'Special Monsters Beef (Free Ice Tea)', price: 'Rp 39.900', img: 'menu/Specialmonstersbeef.jpg', category: 'rice-bowl', favorite: true, description: 'Nasi dengan daging sapi spesial Monster dengan bumbu rahasia, dilengkapi dengan es teh gratis.' },
+        { name: 'Honey Sauce Beef (Free Ice Tea)', price: 'Rp 39.900', img: 'menu/Honeysaucepapperbeef.jpg', category: 'rice-bowl', description: 'Nasi dengan daging sapi saus madu yang manis dan gurih, dilengkapi dengan es teh gratis.' },
+        { name: 'Smoked Pepper Beef (Free Ice Tea)', price: 'Rp 39.900', img: 'menu/Semokedpapperbeef.jpg', category: 'rice-bowl', description: 'Nasi dengan daging sapi merica asap yang aromatik, dilengkapi dengan es teh gratis.' },
+        { name: 'Hot Monsters Chicken (Free Ice Tea)', price: 'Rp 26.900', img: 'menu/Hotmonsterschicken.jpg', category: 'rice-bowl', description: 'Nasi dengan ayam pedas khas Monster, dilengkapi dengan es teh gratis.' },
+        { name: 'Chicken Teriyaki (Free Ice Tea)', price: 'Rp 26.900', img: 'menu/Chickenteriyaki.jpg', category: 'rice-bowl', favorite: true, description: 'Nasi dengan ayam teriyaki yang manis dan lezat, dilengkapi dengan es teh gratis.' },
+        { name: 'Sweet & Sour Chicken (Free Ice Tea)', price: 'Rp 26.900', img: 'menu/Sweet&sourchicken.jpg', category: 'rice-bowl', description: 'Nasi dengan ayam asam manis yang segar, dilengkapi dengan es teh gratis.' },
+        { name: 'Javanesse Honey Spicy (Free Ice Tea)', price: 'Rp 26.900', img: 'menu/Javanessehoneyspicychicken.jpg', category: 'rice-bowl', description: 'Nasi dengan ayam pedas madu Jawa yang khas, dilengkapi dengan es teh gratis.' },
+        { name: 'Chicken Katsu (Free Ice Tea)', price: 'Rp 28.900', img: 'menu/Chickenkatsu.jpg', category: 'rice-bowl', description: 'Nasi dengan ayam katsu crispy yang renyah, dilengkapi dengan es teh gratis.' },
+        { name: 'Mie Hot Monsters', price: 'Rp 20.900', img: 'menu/miehotmonsters.jpg', category: 'mie', favorite: true, description: 'Mie dengan kuah pedas khas Monster yang menggugah selera.' },
+        { name: 'Mie Ayam Monsters', price: 'Rp 20.900', img: 'menu/mieayammonsters.jpg', category: 'mie', description: 'Mie dengan topping ayam khas Monster yang lezat.' },
+        { name: 'Mie Ayam Jamur', price: 'Rp 20.900', img: 'menu/mieayamjamur.jpg', category: 'mie', description: 'Mie dengan topping ayam dan jamur yang segar.' },
+        { name: 'Mie Ayam Katsu', price: 'Rp 22.900', img: 'menu/mieayamkatsu.jpg', category: 'mie', description: 'Mie dengan topping ayam katsu yang crispy dan lezat.' },
+        { name: 'Mie Beef Monsters', price: 'Rp 28.900', img: 'menu/miebeefmonsters.jpg', category: 'mie', description: 'Mie dengan topping daging sapi khas Monster yang gurih.' },
+        { name: 'Mie Polos', price: 'Rp 15.000', img: 'menu/miepolos.jpg', category: 'mie', description: 'Mie sederhana dengan kuah bening yang segar.' },
+      ];
     }
-    
-    function renderAllMenu(category = 'all') {
-      const grid = document.getElementById('allMenuGrid');
-      if (!grid) return;
 
-      const allItems = [
-        { name: 'Hot Monsters Beef (Free Ice Tea)', price: 'Rp 39.900', img: 'menu/hotmonstersbeef.jpg', category: 'rice-bowl' },
-        { name: 'Special Monsters Beef (Free Ice Tea)', price: 'Rp 39.900', img: 'menu/Specialmonstersbeef.jpg', category: 'rice-bowl', favorite: true },
-        { name: 'Honey Sauce Beef (Free Ice Tea)', price: 'Rp 39.900', img: 'menu/Honeysaucepapperbeef.jpg', category: 'rice-bowl' },
-        { name: 'Smoked Pepper Beef (Free Ice Tea)', price: 'Rp 39.900', img: 'menu/Semokedpapperbeef.jpg', category: 'rice-bowl' },
-        { name: 'Hot Monsters Chicken (Free Ice Tea)', price: 'Rp 26.900', img: 'menu/Hotmonsterschicken.jpg', category: 'rice-bowl' },
-        { name: 'Chicken Teriyaki (Free Ice Tea)', price: 'Rp 26.900', img: 'menu/Chickenteriyaki.jpg', category: 'rice-bowl', favorite: true },
-        { name: 'Sweet & Sour Chicken (Free Ice Tea)', price: 'Rp 26.900', img: 'menu/Sweet&sourchicken.jpg', category: 'rice-bowl' },
-        { name: 'Javanesse Honey Spicy (Free Ice Tea)', price: 'Rp 26.900', img: 'menu/Javanessehoneyspicychicken.jpg', category: 'rice-bowl' },
-        { name: 'Chicken Katsu (Free Ice Tea)', price: 'Rp 28.900', img: 'menu/Chickenkatsu.jpg', category: 'rice-bowl' },
-        { name: 'Mie Hot Monsters', price: 'Rp 20.900', img: 'menu/miehotmonsters.jpg', category: 'mie', favorite: true },
-        { name: 'Mie Ayam Monsters', price: 'Rp 20.900', img: 'menu/mieayammonsters.jpg', category: 'mie' },
-        { name: 'Mie Ayam Jamur', price: 'Rp 20.900', img: 'menu/mieayamjamur.jpg', category: 'mie' },
-        { name: 'Mie Ayam Katsu', price: 'Rp 22.900', img: 'menu/mieayamkatsu.jpg', category: 'mie' },
-        { name: 'Mie Beef Monsters', price: 'Rp 28.900', img: 'menu/miebeefmonsters.jpg', category: 'mie' },
-        { name: 'Mie Polos', price: 'Rp 15.000', img: 'menu/miepolos.jpg', category: 'mie' },
+    function renderGroupedMenus() {
+      const container = document.getElementById('groupedMenuContainer');
+      if (!container) return;
+      const items = getAllItems();
+
+      const groupOrder = [
+        { key: 'rice-bowl', title: 'Rice Bowl', icon: '🍚' },
+        { key: 'mie', title: 'Mie', icon: '🍜' },
       ];
 
-      const baseItems = category === 'all' 
-        ? allItems 
-        : allItems.filter(item => item.category === category);
-      const favItems = baseItems.filter(i => i.favorite);
-      const nonFavItems = baseItems.filter(i => !i.favorite);
-      const itemsToRender = [...favItems, ...nonFavItems];
-
-      if (itemsToRender.length > 0) {
-        grid.innerHTML = itemsToRender.map(it => (
-          `<a href="menu.html" class="menu-card" style="text-decoration: none; position: relative;">`+
-          `${it.favorite ? '<div class=\"fav-badge\">★ Favorit</div>' : ''}`+
-          `<img src="${it.img}" alt="${it.name}" loading="lazy">`+
-          `<div class="body"><h3>${it.name}</h3><div class="price">${it.price}</div></div>`+
-          `</a>`
+      const html = groupOrder.map(group => {
+        const groupItems = items.filter(it => it.category === group.key);
+        if (groupItems.length === 0) return '';
+        const cards = groupItems.map(it => (
+          `<div class="h-card" data-menu='${JSON.stringify(it)}'>` +
+            `${it.favorite ? '<div class="fav-badge">★ Best Seller</div>' : ''}` +
+            `<img src="${it.img}" alt="${it.name}">` +
+            `<div class="body"><h3>${it.name}</h3><div class="price">${it.price}</div></div>` +
+          `</div>`
         )).join('');
-      } else {
-        grid.innerHTML = `<p style="color: white; grid-column: 1 / -1; text-align: center;">Menu tidak ditemukan.</p>`;
-      }
+        return `
+          <div class="group-block" id="group-${group.key}">
+            <h3 class="group-title">${group.icon} ${group.title}</h3>
+            <div class="h-scroll">${cards}</div>
+          </div>
+        `;
+      }).join('');
+
+      container.innerHTML = html;
+
+      // Bind click to show detail
+      container.querySelectorAll('.h-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const menuData = JSON.parse(card.getAttribute('data-menu'));
+          showMenuDetail(menuData);
+        });
+      });
     }
 
     function initCategoryFilters() {
@@ -443,7 +1085,10 @@ function findNearestStore() {
           filterButtons.forEach(btn => btn.querySelector('.menu-emoji').classList.remove('active'));
           button.querySelector('.menu-emoji').classList.add('active');
           const category = button.dataset.category;
-          renderAllMenu(category);
+          const target = document.getElementById(`group-${category}`);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
         });
       });
     }
@@ -512,21 +1157,29 @@ function handleHeaderScroll() {
   });
 }
     
+    function initFavoritesButton() {
+      const favoritesBtn = document.getElementById('favoritesBtn');
+      if (favoritesBtn) {
+        favoritesBtn.addEventListener('click', showFavorites);
+      }
+    }
+
     async function init() {
-      // Pastikan user sudah login; jika belum, arahkan ke login
       handlePromoPopup();
+      // Pastikan user sudah login; jika belum, arahkan ke login
       initPromoSlider();
-      initExchangeButton();
       initCategoryFilters();
-      renderAllMenu();
+      initFavoritesButton();
+      renderGroupedMenus();
       loadPendingPoints();
       handleHeaderScroll(); // <-- Panggil fungsi header scroll
       findNearestStore(); // <-- TAMBAHKAN PANGGILAN FUNGSI INI
 
+
       const cachedUserData = JSON.parse(localStorage.getItem('rbm_user') || 'null');
 
       if (!cachedUserData || !cachedUserData.phone) {
-        // Pengunjung belum login: tampilkan placeholder
+        // Jika tidak ada data user, coba auto-fix dengan data demo setelah 2 detik
         document.getElementById('userName').textContent = 'Monsters Lovers';
         document.getElementById('userPoints').textContent = '0';
         return; // Tetap di beranda tanpa memaksa login
