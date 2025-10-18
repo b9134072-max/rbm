@@ -270,6 +270,8 @@ body {
   display: block;
 }
 
+/* [BARU] Wrapper untuk konten di bawah promo agar bisa melengkung */
+
 /* -- Ikon Menu -- */
 .menu-icons {
   display: grid;

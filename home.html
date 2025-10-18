@@ -19,7 +19,7 @@
       --muted: #6b7280;
       --primary: #4C2A85;
       --primary-text: #ffffff;
-      --border: #e5e7eb;
+      --border: #ffffff00;
     }
     * { box-sizing: border-box; }
     body {
@@ -57,6 +57,16 @@
       box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
     
+    /* [BARU] Efek transisi untuk popup */
+    .popup-overlay {
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+      opacity: 0;
+      visibility: hidden;
+    }
+    .popup-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
     .popup-close:hover {
       background: #e5e7eb;
       transform: scale(1.1);
@@ -268,8 +278,10 @@
     .app-header {
       display: flex;
       align-items: center;
-      gap: 16px; /* <-- Jarak antar elemen utama diubah */
-      padding: 8px 16px; /* <-- Jarak atas-bawah diperkecil */
+      gap: 16px;
+      padding: 50px 16px; /* <-- Jarak atas-bawah diperkecil lagi agar lebih tipis */
+      gap: 16px; 
+      padding: 0 16px; /* Padding atas/bawah di-nol-kan agar lebih tipis */
       position: fixed;
       top: 0;
       left: 0;
@@ -294,9 +306,8 @@
         transition: color 0.3s ease;
     }
     /* END MODIFIKASI CSS */
-    .app-header .logo {
-      width: 48px; height: 48px; flex-shrink: 0;
-    }
+    .app-header .logo { width: 85px; height: 56px; flex-shrink: 0; }
+    .app-header .logo { width: 80px; height: 56px; flex-shrink: 0; }
     .app-header .logo img {
       width: 100%; height: 100%; object-fit: contain;
     }
@@ -310,7 +321,7 @@
       color: var(--primary-text); line-height: 1.2;
     }
     .location-row {
-      display: flex; align-items: center; gap: 6px; font-size: 13px;
+      display: flex; align-items: center; gap: 6px; font-size: 9px;
     }
     .location-icon { font-size: 16px; }
     .location-link {
@@ -323,41 +334,43 @@
     }
 
     .content { padding: 0; }
-    .promo-section { margin-bottom: 24px; }
+    .promo-section { margin-bottom: -20px; /* DIUBAH: Tarik section di bawahnya ke atas */ }
     .promo-slider { 
       display: flex; overflow-x: auto; scroll-snap-type: x mandatory; 
       gap: 0; scrollbar-width: none; scroll-behavior: smooth; 
     }
     .promo-slider::-webkit-scrollbar { display: none; }
     .promo-item { 
-      flex: 0 0 100%; scroll-snap-align: center; overflow: hidden;
-      position: relative; border-radius: 0 0 16px 16px;
+      flex: 0 0 100%; scroll-snap-align: center;
+      position: relative;
+      /* [BARU] Menambahkan lengkungan di bagian bawah */
+      border-bottom-left-radius: 0px;
+      border-bottom-right-radius: 0px;
+      border-top-left-radius: 0px;
+      border-top-right-radius: 0px;
+      overflow: hidden; /* Memastikan gambar mengikuti lengkungan */
     }
     .promo-item::after {
       content: ''; position: absolute; top: 0; left: 0; width: 100%;
       height: 150px; background: linear-gradient(to bottom, rgba(0,0,0,0.6), transparent);
       z-index: 1;
     }
-    .promo-item img { 
-      width: 100%; height: 175px; object-fit: cover; 
-      display: block; border-radius: 0 0 16px 16px;
+    .promo-item img {
+      /* DIUBAH: Atur tinggi gambar promo di sini. */
+      width: 100%; height: 200px; object-fit: cover; 
+      display: block;
     }
     
 .menu-icons { 
   display: flex;
   overflow-x: auto;
   gap: 20px; 
-  padding: 0 0px 09px 0px;
+  padding: 24px 16px 16px 16px; /* <-- Padding disesuaikan */
   text-align: center;
-  background: var(--bg);
-  margin-top: -10px;
-  border-radius: 16px 16px 0 0;
-  padding-top: 24px;
+  background: #f3f4f6; /* <-- Warna background konten */
   scrollbar-width: none;
   
-  position: sticky;
-  top: 50px; /* sama dengan tinggi header */
-  z-index: 999; /* Pastikan ia di atas konten menu di bawahnya */
+  /* Tidak perlu lagi menimpa gambar */
 }
   
     .menu-icon { 
@@ -419,12 +432,19 @@
   border: 1px solid var(--border);
   cursor: pointer;
   position: relative;
+  display: flex; /* [DIUBAH] Menggunakan flexbox untuk struktur yang lebih baik */
+  flex-direction: column; /* [BARU] Arah tumpukan vertikal */
   /* Pastikan tidak ada "overflow: hidden" di sini */
 }
     .h-card img { width: 100%; height: 110px; object-fit: cover; border-radius: 12px 12px 0 0; display: block; }
-    .h-card .body { padding: 8px; }
-    .h-card .body h3 { font-size: 13px; margin: 0 0 4px 0; color: var(--text); }
-    .h-card .body .price { font-size: 12px; font-weight: 700; color: var(--primary); }
+    .h-card .body { 
+      padding: 8px; 
+      flex-grow: 1; /* [BARU] Memastikan body mengisi sisa ruang */
+      display: flex; /* [BARU] Menggunakan flexbox untuk konten di dalamnya */
+      flex-direction: column; /* [BARU] Arah tumpukan vertikal */
+    }
+    .h-card .body h3 { font-size: 13px; margin: 0 0 4px 0; color: var(--text); flex-grow: 1; /* [BARU] Judul mengisi ruang agar harga tetap di bawah */ }
+    .h-card .body .price { font-size: 12px; font-weight: 700; color: var(--primary); margin-top: auto; /* [BARU] Mendorong harga ke bagian bawah */ }
     
     /* Sisa CSS Anda tetap sama... (user-profile, voucher, dll.) */
     .user-profile-section { padding: 0 16px; margin-bottom: 20px; }
@@ -487,10 +507,10 @@
 /* == GAYA BADGE PITA - SUDUT LEBIH TAJAM == */
 .fav-badge {
   position: absolute;
-  top: 0;
-  left: -5px;
-  transform: translateY(-75%);
-  z-index: 9;
+  top: 8px; /* [DIUBAH] Atur posisi dari atas */
+  left: -4px; /* [DIUBAH] Atur posisi dari kiri */
+  transform: none; /* [DIUBAH] Hapus transformasi */
+  z-index: 3; /* [DIUBAH] Sesuaikan z-index */
   
   /* Tampilan Pita */
   background: #6b7280;
@@ -499,7 +519,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  padding: 3px 12px 3px 12px;
+  padding: 4px 10px; /* [DIUBAH] Sesuaikan padding */
   box-shadow: -2px 3px 8px rgba(0,0,0,0.3);
   border-radius: 0 9px 9px 0; /* <-- DIUBAH MENJADI 2px AGAR LEBIH TAJAM */
   pointer-events: none;
@@ -519,14 +539,15 @@
 <style>
   /* CSS BARU UNTUK PROFIL PENGGUNA (DESAIN LEBIH BAIK) */
   .user-profile-section {
-    padding: 0 16px;
-    margin-top: -10px;
+    /* Nilai ketiga (24px) adalah padding-bottom, yang mengatur jarak ke bawah. */
+    /* Ubah angka ini untuk mengatur jarak ke section "Spesial Hari Ini". */
+    /* Contoh: 12px untuk jarak lebih dekat, 30px untuk jarak lebih jauh. */
+    padding: 16px 16px 0px 16px; /* Jarak bawah dikurangi dari 24px menjadi 12px */
     position: relative;
     z-index: 2;
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px; /* Jarak antara kotak atas dan bawah */
+    background: var(--bg); /* Warna background utama */
+    border-radius: 24px 24px 0 0; /* <-- DIUBAH: Lengkungan sekarang di atas */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* <-- DIUBAH: Warna bayangan menjadi abu-abu transparan */
   }
   .welcome-card {
     background: var(--card);
@@ -535,10 +556,11 @@
     box-shadow: 0 6px 15px rgba(0,0,0,0.12);
     border: 1px solid var(--border);
   }
-  .actions-grid {
+  .user-profile-section .actions-grid {
     display: flex; /* Menggunakan flexbox untuk tinggi yang sama */
     grid-template-columns: 1fr 1fr;
     gap: 12px;
+    margin-top: 7px; /* <-- ATUR JARAK DI SINI: Jarak antara 'Hello' dan kotak poin */
   }
   .action-card {
     background: var(--card);
@@ -610,7 +632,7 @@
   }
   .offer-image {
     width: 100%; /* Lebar penuh */
-    height: 70px; /* Tinggi gambar disesuaikan */
+    height: 90px; /* Tinggi gambar disesuaikan */
   }
   .offer-image img {
     width: 100%;
@@ -646,92 +668,54 @@
     </div>
   </div>
 
-  <div class="popup-overlay" id="menuDetailPopup">
-    <div class="popup-content menu-detail-popup">
-      <div class="menu-detail-content">
-        <div class="menu-detail-header">
-          <button class="popup-close" id="menuDetailCloseBtn" aria-label="Tutup">×</button>
-        </div>
-        <img id="menuDetailImage" src="" alt="" class="menu-detail-image">
-        <div class="menu-detail-info">
-          <h2 id="menuDetailName"></h2>
-          <div id="menuDetailPrice" class="menu-detail-price"></div>
-          <div id="menuDetailCategory" class="menu-detail-category"></div>
-          <p id="menuDetailDescription" class="menu-detail-description"></p>
-          <div class="menu-detail-actions">
-            <button class="btn-order" id="orderBtn">Pesan Sekarang</button>
-            <button class="btn-favorite" id="favoriteBtn">❤️ Favorit</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Favorites Popup -->
-  <div class="popup-overlay" id="favoritesPopup">
-    <div class="popup-content favorites-popup">
-      <div class="favorites-header">
-        <h2>Menu Favorit Anda</h2>
-        <button class="popup-close" id="favoritesCloseBtn" aria-label="Tutup">×</button>
-      </div>
-      <div class="favorites-content" id="favoritesList">
-        <!-- Favorites will be populated here -->
-      </div>
-    </div>
-  </div>
-
-  <header class="app-header">
+  <header class="app-header" style="justify-content: space-between;">
     <div class="logo">
       <img src="logo-rbm.png" alt="Rice Bowl Monster Logo">
     </div>
-    <div class="brand-stack">
-      <h1 class="brand-name">Rice Bowl Monster</h1>
-      <div class="location-row">
-        <span class="location-icon">📍</span>
-        <a href="#" class="location-link" id="findNearestLocation">
-          Cari Lokasi Terdekat
-        </a>
-      </div>
+    <!-- Bagian Lokasi dipindahkan ke sini -->
+    <div class="location-row">
+      <img src="lokasi.png" alt="Lokasi" class="location-icon" style="width: 16px; height: 20px;">
+      <a href="#" class="location-link" id="findNearestLocation">
+        Cari Lokasi Terdekat
+      </a>
     </div>
-    <button class="notification-btn" id="favoritesBtn" aria-label="Menu Favorit">
-      ❤️
-    </button>
   </header>
 
   <main class="content">
     <section class="promo-section">
       <div class="promo-slider" id="promoSlider">
         <div class="promo-item"><img src="latar-utama.jpg" alt="Latar Utama 1"></div>
-        <div class="promo-item"><img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?q=80&w=1600&auto=format&fit=crop" alt="Latar Utama 2"></div>
+        <div class="promo-item"><img src="latar-utama1.png" alt="Latar Utama 1"></div>
         <div class="promo-item"><img src="https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=1600&auto=format&fit=crop" alt="Latar Utama 3"></div>
       </div>
     </section>
 
-    <section class="user-profile-section">
-      <!-- Kotak panjang untuk sapaan -->
-      <div class="welcome-card">
-        <div class="welcome-text">
-          <span class="hello-text">Hello, </span>
-          <span class="user-name" id="userName">Loading...</span>
-        </div>
-      </div>
-      <!-- Grid untuk poin dan tombol tukar -->
-      <div class="actions-grid">
-        <!-- URUTAN DIUBAH: Teks dulu, baru gambar -->
-        <div class="points-display welcome-card">
-          <div class="points-text-container">
-            <span class="points-label">Poin Anda:</span>
-            <span class="points-value" id="userPoints">0</span>
+    <div style="background-color: #f3f4f6;"> <!-- Wrapper untuk konten di bawah promo -->
+      <section class="user-profile-section">
+        <!-- Kotak panjang untuk sapaan -->
+        <div class="welcome-card">
+          <div class="welcome-text">
+            <span class="hello-text">Hello, </span>
+            <span class="user-name" id="userName">Loading...</span>
           </div>
-          <img src="logo-rbm.png" alt="Poin" class="points-icon">
         </div>
-        <!-- DIUBAH: Tombol Tukar Poin sekarang menjadi kartu yang mirip -->
-        <a href="tukarpoint.html" class="exchange-card welcome-card">
-          <span class="exchange-text">Tukar Poin</span>
-          <img src="logo-rbm.png" alt="Tukar Poin" class="points-icon">
-        </a>
-      </div>
-    </section>
+        <!-- Grid untuk poin dan tombol tukar -->
+        <div class="actions-grid">
+          <!-- URUTAN DIUBAH: Teks dulu, baru gambar -->
+          <div class="points-display welcome-card">
+            <div class="points-text-container">
+              <span class="points-label">Poin Anda:</span>
+              <span class="points-value" id="userPoints">0</span>
+            </div>
+            <img src="koin.png" alt="Poin" class="points-icon">
+          </div>
+          <!-- DIUBAH: Tombol Tukar Poin sekarang menjadi kartu yang mirip -->
+          <a href="tukarpoint.html" class="exchange-card welcome-card">
+            <span class="exchange-text">Tukar Poin</span>
+            <img src="logo-rbm.png" alt="Tukar Poin" class="points-icon">
+          </a>
+        </div>
+      </section>
 
     <!-- [BARU] Bagian Promo Spesial -->
     <section class="special-offer-section">
@@ -788,6 +772,7 @@
     <section class="grouped-menu-section">
       <div id="groupedMenuContainer"></div>
     </section>
+    </div> <!-- Penutup wrapper -->
   </main>
 
   <nav class="bottom-nav">
@@ -818,67 +803,6 @@
         popup.style.display = 'none';
         popup.classList.remove('show');
       });
-    }
-    function showMenuDetail(menuData) {
-      const popup = document.getElementById('menuDetailPopup');
-      const closeBtn = document.getElementById('menuDetailCloseBtn');
-      const orderBtn = document.getElementById('orderBtn');
-      const favoriteBtn = document.getElementById('favoriteBtn');
-      
-      if (!popup) return;
-
-      // Populate popup with menu data
-      document.getElementById('menuDetailImage').src = menuData.img;
-      document.getElementById('menuDetailImage').alt = menuData.name;
-      document.getElementById('menuDetailName').textContent = menuData.name;
-      document.getElementById('menuDetailPrice').textContent = menuData.price;
-      
-      // Set category display
-      const categoryNames = {
-        'rice-bowl': 'Rice Bowl',
-        'mie': 'Mie',
-        'minuman': 'Minuman',
-        'es-vampur': 'Es Vampur',
-        'gorengan': 'Gorengan'
-      };
-      document.getElementById('menuDetailCategory').textContent = categoryNames[menuData.category] || menuData.category;
-      
-      // Use description from menu data
-      document.getElementById('menuDetailDescription').textContent = menuData.description || 'Hidangan lezat dari Rice Bowl Monster.';
-
-      // Show popup
-      popup.style.display = 'flex';
-
-      // Update favorite button state
-      updateFavoriteButton(favoriteBtn, menuData);
-
-      // Close popup when clicking close button
-      closeBtn.onclick = () => {
-        popup.style.display = 'none';
-      };
-
-      // Close popup when clicking outside
-      popup.onclick = (e) => {
-        if (e.target === popup) {
-          popup.style.display = 'none';
-        }
-      };
-
-      // Order button action
-      orderBtn.onclick = () => {
-        alert(`Memesan: ${menuData.name}\nHarga: ${menuData.price}\n\nFitur pemesanan akan segera tersedia!`);
-      };
-
-      // Favorite button action
-      favoriteBtn.onclick = () => {
-        toggleFavorite(menuData);
-        updateFavoriteButton(favoriteBtn, menuData);
-      };
-    }
-
-    // Favorites Management Functions
-    function getFavorites() {
-      return JSON.parse(localStorage.getItem('rbm_favorites') || '[]');
     }
 
     function saveFavorites(favorites) {
@@ -970,43 +894,78 @@
       showFavorites(); // Refresh the favorites list
     }
 
-function findNearestStore() {
-  const locationLink = document.getElementById('findNearestLocation');
-  if (!locationLink) return;
+    function findNearestStore() {
+      const locationLink = document.getElementById('findNearestLocation');
+      if (!locationLink) return;
 
-  // Alamat tujuan Rice Bowl Monster
-  const destinationAddress = "Jl. Kemenangan No. 1, Surabaya";
+      // Daftar lokasi outlet Rice Bowl Monster
+      const stores = [
+        { name: 'Jl. Raya Ponti, Sidoarjo', lat: -7.44698, lon: 112.70157 },
+        { name: 'Jl. Darmokali, Surabaya', lat: -7.28969, lon: 112.74283 }
+      ];
 
-  locationLink.addEventListener('click', (event) => {
-    event.preventDefault(); // Mencegah link membuka halaman baru
-    locationLink.textContent = 'Mencari lokasi...'; // Beri feedback ke user
-
-    if (!navigator.geolocation) {
-      alert('Browser Anda tidak mendukung geolokasi.');
-      locationLink.textContent = 'Cari Lokasi Terdekat';
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const userLatitude = position.coords.latitude;
-        const userLongitude = position.coords.longitude;
-        
-        // Membuat URL Google Maps untuk navigasi
-        const mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${userLatitude},${userLongitude}&destination=${encodeURIComponent(destinationAddress)}`;
-
-        // Buka di tab baru
-        window.open(mapsUrl, '_blank');
-        locationLink.textContent = 'Cari Lokasi Terdekat';
-      },
-      (error) => {
-        console.error("Error mendapatkan lokasi: ", error.message);
-        alert('Gagal mendapatkan lokasi Anda. Pastikan Anda sudah memberikan izin akses lokasi untuk situs ini.');
-        locationLink.textContent = 'Cari Lokasi Terdekat';
+      // Fungsi untuk menghitung jarak (Haversine formula)
+      function getDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371; // Radius bumi dalam km
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = 
+          Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+          Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+          Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c; // Jarak dalam km
       }
-    );
-  });
-}
+
+      if (!navigator.geolocation) {
+        locationLink.textContent = 'Geolokasi tidak didukung';
+        return;
+      }
+
+      locationLink.textContent = 'Mencari lokasi...';
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const userLat = position.coords.latitude;
+          const userLon = position.coords.longitude;
+
+          let nearestStore = null;
+          let minDistance = Infinity;
+
+          stores.forEach(store => {
+            const distance = getDistance(userLat, userLon, store.lat, store.lon);
+            if (distance < minDistance) {
+              minDistance = distance;
+              nearestStore = store;
+            }
+          });
+
+          if (nearestStore) {
+            locationLink.textContent = nearestStore.name;
+            locationLink.href = `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLon}&destination=${nearestStore.lat},${nearestStore.lon}`;
+            locationLink.target = '_blank'; // Buka di tab baru
+            locationLink.onclick = null; // Hapus event click sebelumnya jika ada
+          } else {
+            locationLink.textContent = 'Lokasi tidak ditemukan';
+          }
+        },
+        (error) => {
+          console.error("Error mendapatkan lokasi: ", error.message);
+          locationLink.textContent = 'Izinkan akses lokasi';
+          // Jika user menolak, arahkan ke halaman lokasi manual
+          locationLink.href = 'lokasi.html';
+          locationLink.onclick = null;
+        },
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+      );
+
+      // Hapus event listener default untuk mencegah perilaku yang tidak diinginkan
+      locationLink.addEventListener('click', (event) => {
+        if (locationLink.href === '#' || locationLink.href.endsWith('/#')) {
+          event.preventDefault();
+        }
+      });
+    }
     function initPromoSlider() {
       const slider = document.getElementById('promoSlider');
       if (!slider) return;
@@ -1068,29 +1027,6 @@ function findNearestStore() {
       }).join('');
 
       container.innerHTML = html;
-
-      // Bind click to show detail
-      container.querySelectorAll('.h-card').forEach(card => {
-        card.addEventListener('click', () => {
-          const menuData = JSON.parse(card.getAttribute('data-menu'));
-          showMenuDetail(menuData);
-        });
-      });
-    }
-
-    function initCategoryFilters() {
-      const filterButtons = document.querySelectorAll('.category-filter');
-      filterButtons.forEach(button => {
-        button.addEventListener('click', () => {
-          filterButtons.forEach(btn => btn.querySelector('.menu-emoji').classList.remove('active'));
-          button.querySelector('.menu-emoji').classList.add('active');
-          const category = button.dataset.category;
-          const target = document.getElementById(`group-${category}`);
-          if (target) {
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-        });
-      });
     }
 
     function loadPendingPoints() {
@@ -1157,23 +1093,34 @@ function handleHeaderScroll() {
   });
 }
     
-    function initFavoritesButton() {
-      const favoritesBtn = document.getElementById('favoritesBtn');
-      if (favoritesBtn) {
-        favoritesBtn.addEventListener('click', showFavorites);
-      }
+    // --- FUNGSI BARU UNTUK MENGELOLA SEMUA INTERAKSI ---
+    function setupEventListeners() {
+      const mainContent = document.querySelector('.content');
+
+      // 1. Event Listener untuk mengarahkan ke halaman menu saat kartu diklik
+      mainContent.addEventListener('click', (e) => {
+        const card = e.target.closest('.h-card');
+        if (card && card.dataset.menu) {
+          const menuData = JSON.parse(card.dataset.menu);
+          // [DIUBAH] Arahkan ke halaman menu dengan kategori yang sesuai
+          window.location.href = `menu.html?cat=${menuData.category}`;
+        }
+      });
+
+      // Listener untuk tombol favorit di header
+      const favoritesHeaderBtn = document.getElementById('favoritesBtn');
+      if (favoritesHeaderBtn) favoritesHeaderBtn.addEventListener('click', showFavorites);
     }
 
     async function init() {
       handlePromoPopup();
       // Pastikan user sudah login; jika belum, arahkan ke login
       initPromoSlider();
-      initCategoryFilters();
-      initFavoritesButton();
       renderGroupedMenus();
       loadPendingPoints();
       handleHeaderScroll(); // <-- Panggil fungsi header scroll
       findNearestStore(); // <-- TAMBAHKAN PANGGILAN FUNGSI INI
+      setupEventListeners(); // <-- PANGGIL FUNGSI BARU DI SINI
 
 
       const cachedUserData = JSON.parse(localStorage.getItem('rbm_user') || 'null');
